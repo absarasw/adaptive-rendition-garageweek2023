@@ -94,7 +94,11 @@ export async function PublishAndNotify() {
     // if (quickPublish === 'published') {
     //     return 'updated';
     // }
-    await uploadDocumentFile(folderID);
+    const folderId = await getFolderID();
+
+    console.log("Folder Id = " + folderId);
+
+
 }
 
 
@@ -206,7 +210,7 @@ async function getFolderID() {
     try {
         validateConnnection();
         const options = getRequestOption();
-        const parentFolderPath = 'brandads/content/screens/dummyads';
+        const parentFolderPath = 'abhinavscreens';
         const getByPathUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/root:/${parentFolderPath}:/`;
         const driveResponse = await fetch(getByPathUrl, options);
         const response = await driveResponse.json();
