@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver';
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
 const driveIDGlobal = 'b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1';
-const folderID = '01DF7GY22Q5CGW5CPVAVFKGW62R5XEIQ3X';
+const folderID = '01DF7GY2ZKRI4FWKGI7FG3YBSYGI3NJ4Y6';
 let connectAttempts = 0;
 let accessToken;
 
@@ -94,10 +94,11 @@ export async function PublishAndNotify() {
     // if (quickPublish === 'published') {
     //     return 'updated';
     // }
-    const folderId = await getFolderID();
+    //const folderId = await getFolderID();
 
-    console.log("Folder Id = " + folderId);
+    //console.log("Folder Id = " + folderId);
 
+    uploadDocumentFile(folderID);
 
 }
 
