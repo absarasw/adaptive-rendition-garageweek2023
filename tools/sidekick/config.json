@@ -5,7 +5,7 @@
       "id": "foo2",
       "title": "Adaptive Renditions",
       "event": "foo2",
-      "environments": ["edit"],
+      "environments": ["dev"],
       "url": "/tools/quick-publish/dist/index.html",
       "isPalette": true,
       "paletteRect": "top: auto; bottom: 25px; left: 5px; width: 300px; height: calc(100% - 200px); border-radius: var(--hlx-sk-button-border-radius); overflow: hidden; resize: horizontal;"
