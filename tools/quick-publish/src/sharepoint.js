@@ -46,9 +46,7 @@ const apiEndpoint = 'https://firefly.adobe.io/spl';
 async function sendMultipartRequest() {
     const formData = new FormData();
     formData.boundary = boundary;
-    formData.append('request', jsonContent, {
-        contentType: 'application/json',
-    });
+    formData.append('request', JSON.stringify(jsonContent));
 
     const imgUrl = 'https://main--adaptive-rendition-garageweek2023--absarasw.hlx.live/wallpaper.jpeg';
 
