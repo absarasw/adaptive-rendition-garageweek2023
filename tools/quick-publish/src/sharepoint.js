@@ -1,6 +1,7 @@
 import { PublicClientApplication } from './msal-browser-2.14.2.js';
 import { Document, Paragraph, Packer, HeadingLevel } from 'docx';
 import { saveAs } from 'file-saver';
+import { sendMultipartRequest } from './firefly.js';
 
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
@@ -98,8 +99,12 @@ export async function PublishAndNotify() {
 
     //console.log("Folder Id = " + folderId);
 
-    uploadDocumentFile(folderID);
+    //uploadDocumentFile(folderID);
 
+    var data = sendMultipartRequest('');
+    if(data) {
+        console.log(data.size());
+    }
 }
 
 
