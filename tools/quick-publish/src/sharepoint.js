@@ -97,15 +97,7 @@ async function sendMultipartRequest() {
     }
 }
 
-async function uploadImageFromBlob(blob) {
-    const imageUrl = 'https://raw.githubusercontent.com/anagarwa/adobe-screens-brandads/main/content/dam/ads/mdsrimages/ad4/1.png';
-    // Download the image from the URL
-    const response = await fetch(imageUrl);
-    if (!response.ok) {
-        throw new Error('Failed to download the image.');
-    }
-
-    const imageBlob = await response.blob();
+async function uploadImageFromBlob(imageBlob) {
     const { size, type } = imageBlob;
     console.log(`IMG1 Type: ${type}\n🌌 IMG Size: ${size}`);
 
