@@ -1,4 +1,3 @@
-import axios from 'axios';
 
 const boundary = `--------------------------${Date.now()}`;
 //const imageFile = '/Users/abhinavsaraswat/Documents/wallpaper.jpeg';
@@ -12,59 +11,5 @@ const accessToken = 'eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiw
 const apiEndpoint = 'https://firefly.adobe.io/spl';
 
 
-
-async function sendMultipartRequest() {
-    const formData = new FormData();
-    formData.boundary = boundary;
-    formData.append('request', jsonContent, {
-        contentType: 'application/json',
-    });
-
-    const imgUrl = 'https://main--adaptive-rendition-garageweek2023--absarasw.hlx.live/wallpaper.jpeg';
-
-    const response = await fetch(imgUrl);
-
-    if (!response.ok) {
-        throw new Error('Failed to download the image.');
-    }
-
-    const imageBlob = await response.blob();
-
-    formData.append('gi_IMAGE', imageBlob.stream(), {
-        filename: 'image.jpg',
-        contentType: 'image/jpeg',
-    });
-
-    /*formData.append('gi_IMAGE', fs.createReadStream(imageFile), {
-      filename: 'image.jpg',
-      contentType: 'image/jpeg',
-    });*/
-
-
-
-
-    try {
-        const response = await axios.post(apiEndpoint, formData, {
-            headers: {
-                ...formData.getHeaders(),
-                'x-api-key': 'clio-playground-web',
-                Authorization: `Bearer ${accessToken}`,
-                'x-session-id': 'b2382afb-1324-44be-844e-63ef60e77cbf',
-                'Accept-Encoding': 'gzip, deflate, br',
-            },
-        });
-        console.log(response.headers['content-type']);
-        const contentType = response.headers['content-type'];
-
-        if (contentType && contentType.includes('multipart/form-data')) {
-            // fs.writeFileSync(saveImageFilePath, Buffer.from(response.data));
-        } else {
-            // Handle other types of responses
-            console.log(response.data);
-        }
-    } catch (error) {
-        console.error(error);
-    }
-}
 
 module.exports = sendMultipartRequest;

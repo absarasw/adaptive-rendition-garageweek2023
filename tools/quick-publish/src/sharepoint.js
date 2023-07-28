@@ -2,7 +2,7 @@ import { PublicClientApplication } from './msal-browser-2.14.2.js';
 import { Document, Paragraph, Packer, HeadingLevel } from 'docx';
 import { saveAs } from 'file-saver';
 
-import { sendMultipartRequest } from './firefly.js';
+import axios from "axios";
 
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
@@ -29,6 +29,66 @@ const sp = {
         redirectUri: '/tools/sidekick/spauth.html',
     },
 };
+
+async function sendMultipartRequest() {
+    const formData = new FormData();
+    formData.boundary = boundary;
+    formData.append('request', jsonContent, {
+        contentType: 'application/json',
+    });
+
+    const imgUrl = 'https://main--adaptive-rendition-garageweek2023--absarasw.hlx.live/wallpaper.jpeg';
+
+    const response = await fetch(imgUrl);
+
+    if (!response.ok) {
+        throw new Error('Failed to download the image.');
+    }
+
+    const imageBlob = await response.blob();
+
+    formData.append('gi_IMAGE', imageBlob.stream(), {
+        filename: 'image.jpg',
+        contentType: 'image/jpeg',
+    });
+
+    /*formData.append('gi_IMAGE', fs.createReadStream(imageFile), {
+      filename: 'image.jpg',
+      contentType: 'image/jpeg',
+    });*/
+
+    try {
+        const response = await axios.post(apiEndpoint, formData, {
+            headers: {
+                ...formData.getHeaders(),
+                'x-api-key': 'clio-playground-web',
+                Authorization: `Bearer ${accessToken}`,
+                'x-session-id': 'b2382afb-1324-44be-844e-63ef60e77cbf',
+                'Accept-Encoding': 'gzip, deflate, br',
+            },
+        });
+        console.log(response.headers['content-type']);
+        const contentType = response.headers['content-type'];
+
+        if (contentType && contentType.includes('multipart/form-data')) {
+            // fs.writeFileSync(saveImageFilePath, Buffer.from(response.data));
+        } else {
+            // Handle other types of responses
+            console.log(response.data);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+
+
+
+
+
+
+
 
 export async function connect(callback) {
     const publicClientApplication = new PublicClientApplication(sp.clientApp);
@@ -97,7 +157,7 @@ export async function PublishAndNotify() {
     //     return 'updated';
     // }
     //await uploadDocumentFile(folderID);
-    sendMultipartRequest();
+    await sendMultipartRequest();
 }
 
 
