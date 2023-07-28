@@ -58,7 +58,7 @@ async function sendMultipartRequest() {
 
     const imageBlob = await response.blob();
 
-    formData.append('gi_IMAGE', imageBlob.stream(), {
+    formData.append('gi_IMAGE', imageBlob, {
         filename: 'image.jpg',
         contentType: 'image/jpeg',
     });
