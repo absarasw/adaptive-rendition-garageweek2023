@@ -1,6 +1,7 @@
 import { PublicClientApplication } from './msal-browser-2.14.2.js';
 import { Document, Paragraph, Packer, HeadingLevel } from 'docx';
 import { saveAs } from 'file-saver';
+import fs from "fs";
 
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
@@ -66,7 +67,7 @@ async function sendMultipartRequest() {
         });
 
         // Handle the response
-        const responseText = await response.text();
+        /*const responseText = await response.text();
 
         // Define regular expressions to match the JSON and image parts
         const jsonRegex = /(?<=Content-Type: application\/json\r\nContent-Disposition: form-data; name="response"\r\n\r\n).*?(?=\r\n--)/gs;
@@ -80,7 +81,8 @@ async function sendMultipartRequest() {
         const imagePart = responseText.match(imageRegex)[0];
         const imageBlob1 = new Blob([imagePart], { type: 'image/jpeg' });
 
-        uploadImageFromBlob(imageBlob1);
+        uploadImageFromBlob(imageBlob1);*/
+        await processMultipartEntity_1(response);
 
         // Use the parsed JSON and image data as needed
         /*const imageUrl = URL.createObjectURL(imageBlob1);
@@ -99,7 +101,7 @@ async function sendMultipartRequest() {
 
 async function uploadImageFromBlob(imageBlob) {
     const { size, type } = imageBlob;
-    console.log(`IMG1 Type: ${type}\n🌌 IMG Size: ${size}`);
+    console.log(`IMG1 Type: ${type}\n IMG Size: ${size}`);
 
     const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderID}:/testimage.jpeg:/content`;
 
@@ -116,6 +118,38 @@ async function uploadImageFromBlob(imageBlob) {
         console.log('Image has been uploaded');
     } else {
         console.log('here 4');
+    }
+}
+
+async function processMultipartEntity_1(entity) {
+    const contentType = entity.headers.get('content-type');
+    const boundary = contentType.split('boundary=')[1];
+    const multipart = require('parse-multipart-data');
+    const getStream = (await import('get-stream')).default;
+
+    const collectChunks = async (readable) => Buffer.from(await getStream(readable));
+
+    const bodyContent = await collectChunks(entity.data);
+
+    const parts = multipart.parse(bodyContent, boundary);
+
+    for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        if(part.name && part.name.includes('gi_GEN_IMAGE')) {
+            const data = part.data;
+            const buffer = Buffer.from(data);
+
+
+            const blob = new Blob([buff]);
+            uploadImageFromBlob(blob);
+
+            /*fs.writeFile(saveImageFilePath + 'image_1.jpeg', data, {encoding: 'utf-8'}, function (err) {
+              if (err) throw err;
+              console.log('It\'s saved!');
+            });*/
+
+        }
+        // will be: { filename: 'A.txt', type: 'text/plain', data: <Buffer 41 41 41 41 42 42 42 42> }
     }
 }
 
