@@ -44,7 +44,7 @@ const firefly_accessToken = 'eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTE
 const apiEndpoint = 'https://firefly.adobe.io/spl';
 
 
-async function sendMultipartRequest() {
+async function sendMultipartRequest(apiEndpoint, jsonContent, downloadUrl) {
     const formData = new FormData();
 
     const imageBuffer = await fetch(downloadUrl).then((response) => response.arrayBuffer());
@@ -67,92 +67,62 @@ async function sendMultipartRequest() {
         });
 
         // Handle the response
-        const responseData = await response.json();
-        console.log(responseData);
-        console.log(response.headers['content-type']);
-        const contentType = response.headers['content-type'];
+        const responseText = await response.text();
 
-        if (contentType && contentType.includes('multipart/form-data')) {
-            // fs.writeFileSync(saveImageFilePath, Buffer.from(response.data));
+        // Define regular expressions to match the JSON and image parts
+        const jsonRegex = /(?<=Content-Type: application\/json\r\nContent-Disposition: form-data; name="response"\r\n\r\n).*?(?=\r\n--)/gs;
+        const imageRegex = /(?<=Content-Type: image\/jpeg\r\nContent-Disposition: form-data; filename="gi_GEN_IMAGE_0"; name="gi_GEN_IMAGE_0"\r\n\r\n).*?(?=\r\n--)/gs;
 
-            parseAxiosResponse(response, saveImageFilePath);
-        } else {
-            // Handle other types of responses
-            console.log(response.data);
-        }
+        // Extract the JSON part
+        const jsonPart = responseText.match(jsonRegex)[0];
+        const jsonData = JSON.parse(jsonPart);
+
+        // Extract the image part
+        const imagePart = responseText.match(imageRegex)[0];
+        const imageBlob1 = new Blob([imagePart], { type: 'image/jpeg' });
+
+        uploadImageFromBlob(imageBlob1);
+        // Use the parsed JSON and image data as needed
+        /*const imageUrl = URL.createObjectURL(imageBlob1);
+        // const imageElement = document.getElementById('imagePreview');
+        // imageElement.src = imageUrl;
+        const downloadLink = document.createElement('a');
+        downloadLink.href = imageUrl;
+        downloadLink.download = 'image.jpg'; // Change the filename as desired
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);*/
     } catch (error) {
         console.error(error);
     }
 }
 
-async function parseAxiosResponse(response, saveImageFilePath) {
-    const responseData = response.data;
-    const boundaryRegex = /--(\S+)/.exec(responseData);
-    const bound = `--${boundaryRegex}--` ? boundaryRegex[1] : null;
-    const parts2 = responseData.split('name="gi_GEN_IMAGE_0"');
 
-    // const parts = responseData.split('--+');
+async function uploadImageFromBlob(imageBlob) {
+    const { size, type } = imageBlob;
+    console.log(`IMG1 Type: ${type}\n🌌 IMG Size: ${size}`);
 
-    const imagePart = parts2[2].split('\r\n\r\n')[1].split(bound)[0];
+    const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderId}:/testing.jpeg}:/content`;
 
-    const imageBuffer = Buffer.from(imagePart, 'binary');
-
-    // Save the image data to a file.
-    //await fs.promises.writeFile(saveImageFilePath, imageBuffer);
-
-    console.log('Image saved to file:', saveImageFilePath);
-}
-
-async function processMultipartEntity(entity, saveImageFilePath) {
-    const contentType = entity.headers.get('content-type');
-    const boundary = contentType.split('boundary=')[1];
-
-    const formData = new FormData();
-
-    const partHeaders = [];
-    let partData = Buffer.from([]);
-
-    // Change the import statement to dynamic import
-    const getStream = (await import('get-stream')).default;
-
-    const collectChunks = async (readable) => Buffer.from(await getStream(readable));
-
-    const bodyContent = await collectChunks(entity.data);
-
-    let offset = 0;
-    while (offset < bodyContent.length) {
-        const boundaryIndex = bodyContent.indexOf(boundary, offset);
-        if (boundaryIndex !== -1) {
-            if (partHeaders.length > 0) {
-                formData.append('part', partData, {
-                    header: partHeaders.join('\r\n'),
-                });
-            }
-
-            partHeaders.length = 0;
-            partData = Buffer.from([]);
-            offset = boundaryIndex + boundary.length;
-        } else if (partHeaders.length === 0) {
-            const lineEndIndex = bodyContent.indexOf('\r\n', offset);
-            if (lineEndIndex !== -1) {
-                partHeaders.push(bodyContent.slice(offset, lineEndIndex).toString());
-                offset = lineEndIndex + 2;
-            } else {
-                break; // Not enough data to parse headers, wait for more chunks
-            }
-        } else {
-            const nextBoundaryIndex = bodyContent.indexOf(boundary, offset);
-            if (nextBoundaryIndex !== -1) {
-                partData = Buffer.concat([partData, bodyContent.slice(offset, nextBoundaryIndex)]);
-                offset = nextBoundaryIndex;
-            } else {
-                partData = Buffer.concat([partData, bodyContent.slice(offset)]);
-                break;
-            }
-        }
+    const uploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': imageBlob.type
+        },
+        body: imageBlob
+    });
+    if (uploadResponse.ok) {
+        const response = await uploadResponse.json();
+        console.log('Image has been uploaded');
+    } else {
+        console.log('here 4');
     }
-
 }
+
+
+
+
 
 
 export async function connect(callback) {
