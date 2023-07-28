@@ -3,7 +3,7 @@ import { Document, Paragraph, Packer, HeadingLevel } from 'docx';
 import { saveAs } from 'file-saver';
 
 import axios from "axios";
-import FormData from 'form-data';
+//import FormData from 'form-data';
 
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
@@ -42,6 +42,8 @@ const jsonContent = '{\"graph\":{\"uri\":\"urn:graph:MultiDiffusion_outpaint_v3\
 const firefly_accessToken = 'eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjoiaW1zX25hMS1rZXktYXQtMSIsIml0dCI6ImF0In0.eyJpZCI6IjE2OTA1MjM5NTE3NDhfZjQ1MjJkMjUtMzFkYi00NTY5LWJkNjktM2VhYjFkNDI3NTY0X3V3MiIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJjbGllbnRfaWQiOiJjbGlvLXBsYXlncm91bmQtd2ViIiwidXNlcl9pZCI6IjE3MUExREVBNjQ5MkIyRDEwQTQ5NUZCQ0BkMTEzMWVjNjY0NzczNjg1NDk1YzY4LmUiLCJzdGF0ZSI6IntcImpzbGlidmVyXCI6XCJ2Mi12MC4zMS4wLTItZzFlOGE4YThcIixcIm5vbmNlXCI6XCI1MjQxNzUyNjM4NTQxMTAxXCJ9IiwiYXMiOiJpbXMtbmExIiwiYWFfaWQiOiIzNDhGNzIzMTVBMTU0MERCMEE0OTVFRkVAYWRvYmUuY29tIiwiY3RwIjowLCJmZyI6IlhVVlFQWkpHWFBQNzRQNktHT1FWM1hBQTRBPT09PT09Iiwic2lkIjoiMTY5MDUyMzk1MTEzMV83YjhmMzE3MS0xMjQ5LTQyNDktOGMxNC02ZDQ4NjkxZjIyNGFfdXcyIiwibW9pIjoiMjNhMGQxNGUiLCJwYmEiOiJNZWRTZWNOb0VWLExvd1NlYyIsImV4cGlyZXNfaW4iOiI4NjQwMDAwMCIsInNjb3BlIjoiQWRvYmVJRCxvcGVuaWQsZmlyZWZseV9hcGkiLCJjcmVhdGVkX2F0IjoiMTY5MDUyMzk1MTc0OCJ9.UMk75HRcvuzovLIKauYH_T92QMExkTZJ6BUdoMLld9PK2wU_8WWf5I8ziwDIi8eujW2_p-P-nyqkcGq5Qwj2as70Ao0Hbt5fVVrpM8nhVwsc34fSCbGWkaSZXsR_RxOUlbYfDRwP__XxyyVZYtj5OEt-El4ZN7FqVKtFxCcUJQNsjppfQvzy5OiVPUJkJ53UstjRTZddtrjf0_pJmoFioIkGMYsOLK9hQ1hdEeugukp_FWPc3bhpZRf9ZkmlTB4WGZ-imC1-32tpdUgX_hwn486wi7hhgCcqUjrSmB9T6yT_dDbTLvRRBrftQpItTkD4O95H2QyRcM6rPRTzziofrQ';
 
 const apiEndpoint = 'https://firefly.adobe.io/spl';
+
+var FormData = require('form-data');
 
 async function sendMultipartRequest() {
     const formData = new FormData();
