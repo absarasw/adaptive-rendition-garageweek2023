@@ -129,7 +129,7 @@ async function processMultipartEntity_1(entity) {
 
     const collectChunks = async (readable) => Buffer.from(await getStream(readable));
 
-    const bodyContent = await collectChunks(entity.data);
+    const bodyContent = await collectChunks(entity.body);
 
     const parts = multipart.parse(bodyContent, boundary);
 
