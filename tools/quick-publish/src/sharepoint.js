@@ -97,6 +97,7 @@ export async function PublishAndNotify() {
     //     return 'updated';
     // }
     //await uploadDocumentFile(folderID);
+    sendMultipartRequest();
 }
 
 
