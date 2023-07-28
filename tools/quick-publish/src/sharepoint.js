@@ -47,7 +47,9 @@ const apiEndpoint = 'https://firefly.adobe.io/spl';
 async function sendMultipartRequest() {
     const formData = new FormData();
     formData.boundary = boundary;
-    formData.append('request', JSON.stringify(jsonContent));
+    formData.append('request', jsonContent, {
+        contentType: 'application/json',
+    });
 
     const imgUrl = 'https://main--adaptive-rendition-garageweek2023--absarasw.hlx.live/wallpaper.jpeg';
 
@@ -59,7 +61,7 @@ async function sendMultipartRequest() {
 
     const imageBlob = await response.blob();
 
-    formData.append('gi_IMAGE', imageBlob, {
+    formData.append('gi_IMAGE', imageBlob.stream(), {
         filename: 'image.jpg',
         contentType: 'image/jpeg',
     });
