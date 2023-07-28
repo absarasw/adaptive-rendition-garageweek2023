@@ -37,6 +37,8 @@
     "file-saver": "^2.0.5",
     "form-data": "^4.0.0",
     "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react-dom": "^16.8.0",
+    "isomorphic-form-data": "2.0.0",
+    "get-stream": "7.0.1"
   }
 }

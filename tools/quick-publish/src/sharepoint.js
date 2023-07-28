@@ -2,9 +2,6 @@ import { PublicClientApplication } from './msal-browser-2.14.2.js';
 import { Document, Paragraph, Packer, HeadingLevel } from 'docx';
 import { saveAs } from 'file-saver';
 
-import axios from "axios";
-import FormData from 'form-data';
-
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
 const driveIDGlobal = 'b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1';
@@ -32,60 +29,53 @@ const sp = {
 };
 
 
+const saveImageFilePath = '/Users/sneharora/Desktop/1.jpg';
+const downloadUrl = 'https://images.pexels.com/photos/60597/dahlia-red-blossom-bloom-60597.jpeg?cs=srgb&dl=pexels-pixabay-60597.jpg&fm=jpg&_gl=1*1v7pi2k*_ga*MTM1Mjc3OTgzOS4xNjkwMzAxOTY2*_ga_8JE65Q40S6*MTY5MDMwMTk2Ni4xLjEuMTY5MDMwMTk4NC4wLjAuMA..'; // Replace with the URL of the binary file you want to download
+//const targetFilePath = '/Users/sneharora/Desktop/dahila.jpg'; // Replace with the destination file path on your system
+
 const boundary = `--------------------------${Date.now()}`;
-//const imageFile = '/Users/abhinavsaraswat/Documents/wallpaper.jpeg';
+const imageFile = '';
 
 // const jsonContent = '{\"graph\":{\"uri\":\"urn:graph:MultiDiffusion_outpaint_v3\"},\"params\":[{\"name\":\"gi_MODE\",\"value\":\"ginp\",\"type\":\"string\"},{\"name\":\"gi_SEED\",\"value\":[{\"name\":\"0\",\"value\":78841,\"type\":\"scalar\"},{\"name\":\"1\",\"value\":11158,\"type\":\"scalar\"},{\"name\":\"2\",\"value\":81232,\"type\":\"scalar\"},{\"name\":\"3\",\"value\":26310,\"type\":\"scalar\"}],\"type\":\"array\"},{\"name\":\"gi_NUM_STEPS\",\"value\":70,\"type\":\"scalar\"},{\"name\":\"gi_GUIDANCE\",\"value\":6,\"type\":\"scalar\"},{\"name\":\"gi_ENABLE_PROMPT_FILTER\",\"value\":true,\"type\":\"boolean\"},{\"name\":\"gi_OUTPUT_WIDTH\",\"value\":1408,\"type\":\"scalar\"},{\"name\":\"gi_OUTPUT_HEIGHT\",\"value\":1024,\"type\":\"scalar\"},{\"name\":\"gi_AR_SHIFT\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_AR_DILATE\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_ADVANCED\",\"value\":\"{\\\"enable_mts\\\":true}\",\"type\":\"string\"}],\"inputs\":{\"gi_IMAGE\":{\"id\":\"a8226039-72c4-4bf3-bae1-faaca5561347\",\"toStore\":{\"lifeCycle\":\"session\"},\"type\":\"image\"}},\"outputs\":{\"gi_GEN_IMAGE\":{\"type\":\"array\",\"expectedMimeType\":\"image\\/jpeg\",\"expectedArrayLength\":1,\"id\":\"74c63a43-1a7b-4d0b-b950-75f3ba97adf8\"},\"gi_GEN_STATUS\":{\"type\":\"array\",\"id\":\"0ef7ad76-9aa6-4f5c-b7dc-43bb0f3ed1fd\"}}}';
 
 const jsonContent = '{\"graph\":{\"uri\":\"urn:graph:MultiDiffusion_outpaint_v3\"},\"params\":[{\"name\":\"gi_MODE\",\"value\":\"ginp\",\"type\":\"string\"},{\"name\":\"gi_SEED\",\"value\":[{\"name\":\"0\",\"value\":78841,\"type\":\"scalar\"}],\"type\":\"array\"},{\"name\":\"gi_NUM_STEPS\",\"value\":70,\"type\":\"scalar\"},{\"name\":\"gi_GUIDANCE\",\"value\":6,\"type\":\"scalar\"},{\"name\":\"gi_ENABLE_PROMPT_FILTER\",\"value\":true,\"type\":\"boolean\"},{\"name\":\"gi_OUTPUT_WIDTH\",\"value\":1408,\"type\":\"scalar\"},{\"name\":\"gi_OUTPUT_HEIGHT\",\"value\":1024,\"type\":\"scalar\"},{\"name\":\"gi_AR_SHIFT\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_AR_DILATE\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_ADVANCED\",\"value\":\"{\\\"enable_mts\\\":true}\",\"type\":\"string\"}],\"inputs\":{\"gi_IMAGE\":{\"id\":\"a8226039-72c4-4bf3-bae1-faaca5561347\",\"toStore\":{\"lifeCycle\":\"session\"},\"type\":\"image\"}},\"outputs\":{\"gi_GEN_IMAGE\":{\"type\":\"array\",\"expectedMimeType\":\"image\\/jpeg\",\"expectedArrayLength\":1,\"id\":\"74c63a43-1a7b-4d0b-b950-75f3ba97adf8\"},\"gi_GEN_STATUS\":{\"type\":\"array\",\"id\":\"0ef7ad76-9aa6-4f5c-b7dc-43bb0f3ed1fd\"}}}';
 
-const firefly_accessToken = 'eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjoiaW1zX25hMS1rZXktYXQtMSIsIml0dCI6ImF0In0.eyJpZCI6IjE2OTA1MjM5NTE3NDhfZjQ1MjJkMjUtMzFkYi00NTY5LWJkNjktM2VhYjFkNDI3NTY0X3V3MiIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJjbGllbnRfaWQiOiJjbGlvLXBsYXlncm91bmQtd2ViIiwidXNlcl9pZCI6IjE3MUExREVBNjQ5MkIyRDEwQTQ5NUZCQ0BkMTEzMWVjNjY0NzczNjg1NDk1YzY4LmUiLCJzdGF0ZSI6IntcImpzbGlidmVyXCI6XCJ2Mi12MC4zMS4wLTItZzFlOGE4YThcIixcIm5vbmNlXCI6XCI1MjQxNzUyNjM4NTQxMTAxXCJ9IiwiYXMiOiJpbXMtbmExIiwiYWFfaWQiOiIzNDhGNzIzMTVBMTU0MERCMEE0OTVFRkVAYWRvYmUuY29tIiwiY3RwIjowLCJmZyI6IlhVVlFQWkpHWFBQNzRQNktHT1FWM1hBQTRBPT09PT09Iiwic2lkIjoiMTY5MDUyMzk1MTEzMV83YjhmMzE3MS0xMjQ5LTQyNDktOGMxNC02ZDQ4NjkxZjIyNGFfdXcyIiwibW9pIjoiMjNhMGQxNGUiLCJwYmEiOiJNZWRTZWNOb0VWLExvd1NlYyIsImV4cGlyZXNfaW4iOiI4NjQwMDAwMCIsInNjb3BlIjoiQWRvYmVJRCxvcGVuaWQsZmlyZWZseV9hcGkiLCJjcmVhdGVkX2F0IjoiMTY5MDUyMzk1MTc0OCJ9.UMk75HRcvuzovLIKauYH_T92QMExkTZJ6BUdoMLld9PK2wU_8WWf5I8ziwDIi8eujW2_p-P-nyqkcGq5Qwj2as70Ao0Hbt5fVVrpM8nhVwsc34fSCbGWkaSZXsR_RxOUlbYfDRwP__XxyyVZYtj5OEt-El4ZN7FqVKtFxCcUJQNsjppfQvzy5OiVPUJkJ53UstjRTZddtrjf0_pJmoFioIkGMYsOLK9hQ1hdEeugukp_FWPc3bhpZRf9ZkmlTB4WGZ-imC1-32tpdUgX_hwn486wi7hhgCcqUjrSmB9T6yT_dDbTLvRRBrftQpItTkD4O95H2QyRcM6rPRTzziofrQ';
-
+const firefly_accessToken = 'eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjoiaW1zX25hMS1rZXktYXQtMSIsIml0dCI6ImF0In0.eyJpZCI6IjE2OTA1MzY1MzYxNDBfYmNhZGU1MzUtNjhjYi00ZGIzLWEzNmYtNTU0OWY2NGRkYjg4X3V3MiIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJjbGllbnRfaWQiOiJjbGlvLXBsYXlncm91bmQtd2ViIiwidXNlcl9pZCI6Ijg4NzExRjVENjMxQzMzQTYwQTQ5NUU4RkA4MGExMWY3YTYzMWMwYzdhNDk1ZWMxLmUiLCJzdGF0ZSI6IntcImpzbGlidmVyXCI6XCJ2Mi12MC4zMS4wLTItZzFlOGE4YThcIixcIm5vbmNlXCI6XCIyMTkxOTgyOTAyOTUxMjM4XCJ9IiwiYXMiOiJpbXMtbmExIiwiYWFfaWQiOiJDMUZDNTdFQjU0ODlERkY4MEE0Qzk4QTVAYWRvYmUuY29tIiwiY3RwIjowLCJmZyI6IlhVVjVSNlI0WFBQN01QNktHT1FWMzdBQTJZPT09PT09Iiwic2lkIjoiMTY5MDUzMzQzNTQwOV8zNzA3NWJiMS05YWFiLTRiNGUtYWM0Ny1lNGViZjU3ZTkzOTFfdXcyIiwibW9pIjoiYTU5MTdkZjciLCJwYmEiOiJNZWRTZWNOb0VWLExvd1NlYyIsImV4cGlyZXNfaW4iOiI4NjQwMDAwMCIsInNjb3BlIjoiQWRvYmVJRCxvcGVuaWQsZmlyZWZseV9hcGkiLCJjcmVhdGVkX2F0IjoiMTY5MDUzNjUzNjE0MCJ9.PTMCpJodbV8L2tbV7p-vK90-B8ibdRhf92UEj0k3eOyYL11JdoOzFUmluJbmKmeBIo0_0rEbGYKL8j-_LHG6vaGLyAfWFPAYMdzURttrdqwhKlakAji3pxlnEkos0nIbdRv-FbdZKP8XVd9y6D_YcnA-EbvNd_v8xVZWwGvS0K1ywJlMsqlaSzJezEh6FNGUBVoYMn947EjsqNx43mx_fO20b7v4sgLxpr1YJeUzqNptHri4XZ-Nj46PGO7VEKzu4CUTBwgQnr9p5TLNIRxMsU73fSN6jqGlTtlup4ccUpbHcElaDJ84qC_whQCh1zvMaJMM10P1x7zhZobDt8sD_w';
 const apiEndpoint = 'https://firefly.adobe.io/spl';
 
 
 async function sendMultipartRequest() {
     const formData = new FormData();
-    formData.boundary = boundary;
-    formData.append('request', jsonContent, {
-        contentType: 'application/json',
-    });
 
-    const imgUrl = 'https://main--adaptive-rendition-garageweek2023--absarasw.hlx.live/wallpaper.jpeg';
-
-    const response = await fetch(imgUrl);
-
-    if (!response.ok) {
-        throw new Error('Failed to download the image.');
-    }
-
-    const imageBlob = await response.blob();
-
-    formData.append('gi_IMAGE', imageBlob.stream(), {
-        filename: 'image.jpg',
-        contentType: 'image/jpeg',
-    });
-
-    /*formData.append('gi_IMAGE', fs.createReadStream(imageFile), {
-      filename: 'image.jpg',
-      contentType: 'image/jpeg',
-    });*/
-
+    const imageBuffer = await fetch(downloadUrl).then((response) => response.arrayBuffer());
+    const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });
+    formData.append('gi_IMAGE', imageBlob, 'blob');
+    const jsonBlob = new Blob([jsonContent], { type: 'application/json' });
+    formData.append('request', jsonBlob);
     try {
-        const response = await axios.post(apiEndpoint, formData, {
+        const response = await fetch(apiEndpoint, {
+            method: 'POST',
             headers: {
-                ...formData.getHeaders(),
-                'x-api-key': 'clio-playground-web',
                 Authorization: `Bearer ${firefly_accessToken}`,
+                'x-api-key': 'clio-playground-web',
                 'x-session-id': 'b2382afb-1324-44be-844e-63ef60e77cbf',
                 'Accept-Encoding': 'gzip, deflate, br',
+                'access-control-allow-origin': '*',
+                'x-request-id': '477f762a-02c9-4f2f-ae65-ff8fcc823111',
             },
+            body: formData,
         });
+
+        // Handle the response
+        const responseData = await response.json();
+        console.log(responseData);
         console.log(response.headers['content-type']);
         const contentType = response.headers['content-type'];
 
         if (contentType && contentType.includes('multipart/form-data')) {
             // fs.writeFileSync(saveImageFilePath, Buffer.from(response.data));
+
+            parseAxiosResponse(response, saveImageFilePath);
         } else {
             // Handle other types of responses
             console.log(response.data);
@@ -95,13 +85,74 @@ async function sendMultipartRequest() {
     }
 }
 
+async function parseAxiosResponse(response, saveImageFilePath) {
+    const responseData = response.data;
+    const boundaryRegex = /--(\S+)/.exec(responseData);
+    const bound = `--${boundaryRegex}--` ? boundaryRegex[1] : null;
+    const parts2 = responseData.split('name="gi_GEN_IMAGE_0"');
 
+    // const parts = responseData.split('--+');
 
+    const imagePart = parts2[2].split('\r\n\r\n')[1].split(bound)[0];
 
+    const imageBuffer = Buffer.from(imagePart, 'binary');
 
+    // Save the image data to a file.
+    //await fs.promises.writeFile(saveImageFilePath, imageBuffer);
 
+    console.log('Image saved to file:', saveImageFilePath);
+}
 
+async function processMultipartEntity(entity, saveImageFilePath) {
+    const contentType = entity.headers.get('content-type');
+    const boundary = contentType.split('boundary=')[1];
 
+    const formData = new FormData();
+
+    const partHeaders = [];
+    let partData = Buffer.from([]);
+
+    // Change the import statement to dynamic import
+    const getStream = (await import('get-stream')).default;
+
+    const collectChunks = async (readable) => Buffer.from(await getStream(readable));
+
+    const bodyContent = await collectChunks(entity.data);
+
+    let offset = 0;
+    while (offset < bodyContent.length) {
+        const boundaryIndex = bodyContent.indexOf(boundary, offset);
+        if (boundaryIndex !== -1) {
+            if (partHeaders.length > 0) {
+                formData.append('part', partData, {
+                    header: partHeaders.join('\r\n'),
+                });
+            }
+
+            partHeaders.length = 0;
+            partData = Buffer.from([]);
+            offset = boundaryIndex + boundary.length;
+        } else if (partHeaders.length === 0) {
+            const lineEndIndex = bodyContent.indexOf('\r\n', offset);
+            if (lineEndIndex !== -1) {
+                partHeaders.push(bodyContent.slice(offset, lineEndIndex).toString());
+                offset = lineEndIndex + 2;
+            } else {
+                break; // Not enough data to parse headers, wait for more chunks
+            }
+        } else {
+            const nextBoundaryIndex = bodyContent.indexOf(boundary, offset);
+            if (nextBoundaryIndex !== -1) {
+                partData = Buffer.concat([partData, bodyContent.slice(offset, nextBoundaryIndex)]);
+                offset = nextBoundaryIndex;
+            } else {
+                partData = Buffer.concat([partData, bodyContent.slice(offset)]);
+                break;
+            }
+        }
+    }
+
+}
 
 
 export async function connect(callback) {
