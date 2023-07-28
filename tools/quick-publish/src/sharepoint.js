@@ -101,7 +101,7 @@ async function uploadImageFromBlob(imageBlob) {
     const { size, type } = imageBlob;
     console.log(`IMG1 Type: ${type}\n🌌 IMG Size: ${size}`);
 
-    const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderID}:/testimage.jpeg}:/content`;
+    const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderID}:/testimage.jpeg:/content`;
 
     const uploadResponse = await fetch(uploadUrl, {
         method: 'PUT',
