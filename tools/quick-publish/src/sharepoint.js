@@ -2,6 +2,8 @@ import { PublicClientApplication } from './msal-browser-2.14.2.js';
 import { Document, Paragraph, Packer, HeadingLevel } from 'docx';
 import { saveAs } from 'file-saver';
 
+import { sendMultipartRequest } from './firefly.js';
+
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
 const driveIDGlobal = 'b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1';
@@ -94,7 +96,7 @@ export async function PublishAndNotify() {
     // if (quickPublish === 'published') {
     //     return 'updated';
     // }
-    await uploadDocumentFile(folderID);
+    //await uploadDocumentFile(folderID);
 }
 
 

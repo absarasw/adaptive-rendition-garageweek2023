@@ -1,0 +1,70 @@
+import axios from 'axios';
+
+const boundary = `--------------------------${Date.now()}`;
+//const imageFile = '/Users/abhinavsaraswat/Documents/wallpaper.jpeg';
+
+// const jsonContent = '{\"graph\":{\"uri\":\"urn:graph:MultiDiffusion_outpaint_v3\"},\"params\":[{\"name\":\"gi_MODE\",\"value\":\"ginp\",\"type\":\"string\"},{\"name\":\"gi_SEED\",\"value\":[{\"name\":\"0\",\"value\":78841,\"type\":\"scalar\"},{\"name\":\"1\",\"value\":11158,\"type\":\"scalar\"},{\"name\":\"2\",\"value\":81232,\"type\":\"scalar\"},{\"name\":\"3\",\"value\":26310,\"type\":\"scalar\"}],\"type\":\"array\"},{\"name\":\"gi_NUM_STEPS\",\"value\":70,\"type\":\"scalar\"},{\"name\":\"gi_GUIDANCE\",\"value\":6,\"type\":\"scalar\"},{\"name\":\"gi_ENABLE_PROMPT_FILTER\",\"value\":true,\"type\":\"boolean\"},{\"name\":\"gi_OUTPUT_WIDTH\",\"value\":1408,\"type\":\"scalar\"},{\"name\":\"gi_OUTPUT_HEIGHT\",\"value\":1024,\"type\":\"scalar\"},{\"name\":\"gi_AR_SHIFT\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_AR_DILATE\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_ADVANCED\",\"value\":\"{\\\"enable_mts\\\":true}\",\"type\":\"string\"}],\"inputs\":{\"gi_IMAGE\":{\"id\":\"a8226039-72c4-4bf3-bae1-faaca5561347\",\"toStore\":{\"lifeCycle\":\"session\"},\"type\":\"image\"}},\"outputs\":{\"gi_GEN_IMAGE\":{\"type\":\"array\",\"expectedMimeType\":\"image\\/jpeg\",\"expectedArrayLength\":1,\"id\":\"74c63a43-1a7b-4d0b-b950-75f3ba97adf8\"},\"gi_GEN_STATUS\":{\"type\":\"array\",\"id\":\"0ef7ad76-9aa6-4f5c-b7dc-43bb0f3ed1fd\"}}}';
+
+const jsonContent = '{\"graph\":{\"uri\":\"urn:graph:MultiDiffusion_outpaint_v3\"},\"params\":[{\"name\":\"gi_MODE\",\"value\":\"ginp\",\"type\":\"string\"},{\"name\":\"gi_SEED\",\"value\":[{\"name\":\"0\",\"value\":78841,\"type\":\"scalar\"}],\"type\":\"array\"},{\"name\":\"gi_NUM_STEPS\",\"value\":70,\"type\":\"scalar\"},{\"name\":\"gi_GUIDANCE\",\"value\":6,\"type\":\"scalar\"},{\"name\":\"gi_ENABLE_PROMPT_FILTER\",\"value\":true,\"type\":\"boolean\"},{\"name\":\"gi_OUTPUT_WIDTH\",\"value\":1408,\"type\":\"scalar\"},{\"name\":\"gi_OUTPUT_HEIGHT\",\"value\":1024,\"type\":\"scalar\"},{\"name\":\"gi_AR_SHIFT\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_AR_DILATE\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_ADVANCED\",\"value\":\"{\\\"enable_mts\\\":true}\",\"type\":\"string\"}],\"inputs\":{\"gi_IMAGE\":{\"id\":\"a8226039-72c4-4bf3-bae1-faaca5561347\",\"toStore\":{\"lifeCycle\":\"session\"},\"type\":\"image\"}},\"outputs\":{\"gi_GEN_IMAGE\":{\"type\":\"array\",\"expectedMimeType\":\"image\\/jpeg\",\"expectedArrayLength\":1,\"id\":\"74c63a43-1a7b-4d0b-b950-75f3ba97adf8\"},\"gi_GEN_STATUS\":{\"type\":\"array\",\"id\":\"0ef7ad76-9aa6-4f5c-b7dc-43bb0f3ed1fd\"}}}';
+
+const accessToken = 'eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjoiaW1zX25hMS1rZXktYXQtMSIsIml0dCI6ImF0In0.eyJpZCI6IjE2OTA1MjM5NTE3NDhfZjQ1MjJkMjUtMzFkYi00NTY5LWJkNjktM2VhYjFkNDI3NTY0X3V3MiIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJjbGllbnRfaWQiOiJjbGlvLXBsYXlncm91bmQtd2ViIiwidXNlcl9pZCI6IjE3MUExREVBNjQ5MkIyRDEwQTQ5NUZCQ0BkMTEzMWVjNjY0NzczNjg1NDk1YzY4LmUiLCJzdGF0ZSI6IntcImpzbGlidmVyXCI6XCJ2Mi12MC4zMS4wLTItZzFlOGE4YThcIixcIm5vbmNlXCI6XCI1MjQxNzUyNjM4NTQxMTAxXCJ9IiwiYXMiOiJpbXMtbmExIiwiYWFfaWQiOiIzNDhGNzIzMTVBMTU0MERCMEE0OTVFRkVAYWRvYmUuY29tIiwiY3RwIjowLCJmZyI6IlhVVlFQWkpHWFBQNzRQNktHT1FWM1hBQTRBPT09PT09Iiwic2lkIjoiMTY5MDUyMzk1MTEzMV83YjhmMzE3MS0xMjQ5LTQyNDktOGMxNC02ZDQ4NjkxZjIyNGFfdXcyIiwibW9pIjoiMjNhMGQxNGUiLCJwYmEiOiJNZWRTZWNOb0VWLExvd1NlYyIsImV4cGlyZXNfaW4iOiI4NjQwMDAwMCIsInNjb3BlIjoiQWRvYmVJRCxvcGVuaWQsZmlyZWZseV9hcGkiLCJjcmVhdGVkX2F0IjoiMTY5MDUyMzk1MTc0OCJ9.UMk75HRcvuzovLIKauYH_T92QMExkTZJ6BUdoMLld9PK2wU_8WWf5I8ziwDIi8eujW2_p-P-nyqkcGq5Qwj2as70Ao0Hbt5fVVrpM8nhVwsc34fSCbGWkaSZXsR_RxOUlbYfDRwP__XxyyVZYtj5OEt-El4ZN7FqVKtFxCcUJQNsjppfQvzy5OiVPUJkJ53UstjRTZddtrjf0_pJmoFioIkGMYsOLK9hQ1hdEeugukp_FWPc3bhpZRf9ZkmlTB4WGZ-imC1-32tpdUgX_hwn486wi7hhgCcqUjrSmB9T6yT_dDbTLvRRBrftQpItTkD4O95H2QyRcM6rPRTzziofrQ';
+
+const apiEndpoint = 'https://firefly.adobe.io/spl';
+
+
+
+async function sendMultipartRequest(imageFile) {
+    const formData = new FormData();
+    formData.boundary = boundary;
+    formData.append('request', jsonContent, {
+        contentType: 'application/json',
+    });
+
+    const imgUrl = 'https://main--adaptive-rendition-garageweek2023--absarasw.hlx.live/wallpaper.jpeg';
+
+    const response = await fetch(imgUrl);
+
+    if (!response.ok) {
+        throw new Error('Failed to download the image.');
+    }
+
+    const imageBlob = await response.blob();
+
+    formData.append('gi_IMAGE', imageBlob.stream(), {
+        filename: 'image.jpg',
+        contentType: 'image/jpeg',
+    });
+
+    /*formData.append('gi_IMAGE', fs.createReadStream(imageFile), {
+      filename: 'image.jpg',
+      contentType: 'image/jpeg',
+    });*/
+
+
+
+
+    try {
+        const response = await axios.post(apiEndpoint, formData, {
+            headers: {
+                ...formData.getHeaders(),
+                'x-api-key': 'clio-playground-web',
+                Authorization: `Bearer ${accessToken}`,
+                'x-session-id': 'b2382afb-1324-44be-844e-63ef60e77cbf',
+                'Accept-Encoding': 'gzip, deflate, br',
+            },
+        });
+        console.log(response.headers['content-type']);
+        const contentType = response.headers['content-type'];
+
+        if (contentType && contentType.includes('multipart/form-data')) {
+            // fs.writeFileSync(saveImageFilePath, Buffer.from(response.data));
+        } else {
+            // Handle other types of responses
+            console.log(response.data);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+module.exports = sendMultipartRequest;
