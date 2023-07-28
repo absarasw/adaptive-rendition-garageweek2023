@@ -29,9 +29,9 @@ const sp = {
 };
 
 
-const saveImageFilePath = '/Users/sneharora/Desktop/1.jpg';
+
 const downloadUrl = 'https://images.pexels.com/photos/60597/dahlia-red-blossom-bloom-60597.jpeg?cs=srgb&dl=pexels-pixabay-60597.jpg&fm=jpg&_gl=1*1v7pi2k*_ga*MTM1Mjc3OTgzOS4xNjkwMzAxOTY2*_ga_8JE65Q40S6*MTY5MDMwMTk2Ni4xLjEuMTY5MDMwMTk4NC4wLjAuMA..'; // Replace with the URL of the binary file you want to download
-//const targetFilePath = '/Users/sneharora/Desktop/dahila.jpg'; // Replace with the destination file path on your system
+
 
 const boundary = `--------------------------${Date.now()}`;
 const imageFile = '';
@@ -42,7 +42,6 @@ const jsonContent = '{\"graph\":{\"uri\":\"urn:graph:MultiDiffusion_outpaint_v3\
 
 const firefly_accessToken = 'eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjoiaW1zX25hMS1rZXktYXQtMSIsIml0dCI6ImF0In0.eyJpZCI6IjE2OTA1MzY1MzYxNDBfYmNhZGU1MzUtNjhjYi00ZGIzLWEzNmYtNTU0OWY2NGRkYjg4X3V3MiIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJjbGllbnRfaWQiOiJjbGlvLXBsYXlncm91bmQtd2ViIiwidXNlcl9pZCI6Ijg4NzExRjVENjMxQzMzQTYwQTQ5NUU4RkA4MGExMWY3YTYzMWMwYzdhNDk1ZWMxLmUiLCJzdGF0ZSI6IntcImpzbGlidmVyXCI6XCJ2Mi12MC4zMS4wLTItZzFlOGE4YThcIixcIm5vbmNlXCI6XCIyMTkxOTgyOTAyOTUxMjM4XCJ9IiwiYXMiOiJpbXMtbmExIiwiYWFfaWQiOiJDMUZDNTdFQjU0ODlERkY4MEE0Qzk4QTVAYWRvYmUuY29tIiwiY3RwIjowLCJmZyI6IlhVVjVSNlI0WFBQN01QNktHT1FWMzdBQTJZPT09PT09Iiwic2lkIjoiMTY5MDUzMzQzNTQwOV8zNzA3NWJiMS05YWFiLTRiNGUtYWM0Ny1lNGViZjU3ZTkzOTFfdXcyIiwibW9pIjoiYTU5MTdkZjciLCJwYmEiOiJNZWRTZWNOb0VWLExvd1NlYyIsImV4cGlyZXNfaW4iOiI4NjQwMDAwMCIsInNjb3BlIjoiQWRvYmVJRCxvcGVuaWQsZmlyZWZseV9hcGkiLCJjcmVhdGVkX2F0IjoiMTY5MDUzNjUzNjE0MCJ9.PTMCpJodbV8L2tbV7p-vK90-B8ibdRhf92UEj0k3eOyYL11JdoOzFUmluJbmKmeBIo0_0rEbGYKL8j-_LHG6vaGLyAfWFPAYMdzURttrdqwhKlakAji3pxlnEkos0nIbdRv-FbdZKP8XVd9y6D_YcnA-EbvNd_v8xVZWwGvS0K1ywJlMsqlaSzJezEh6FNGUBVoYMn947EjsqNx43mx_fO20b7v4sgLxpr1YJeUzqNptHri4XZ-Nj46PGO7VEKzu4CUTBwgQnr9p5TLNIRxMsU73fSN6jqGlTtlup4ccUpbHcElaDJ84qC_whQCh1zvMaJMM10P1x7zhZobDt8sD_w';
 const apiEndpoint = 'https://firefly.adobe.io/spl';
-
 
 async function sendMultipartRequest() {
     const formData = new FormData();
@@ -67,92 +66,73 @@ async function sendMultipartRequest() {
         });
 
         // Handle the response
-        const responseData = await response.json();
-        console.log(responseData);
-        console.log(response.headers['content-type']);
-        const contentType = response.headers['content-type'];
+        const responseText = await response.text();
 
-        if (contentType && contentType.includes('multipart/form-data')) {
-            // fs.writeFileSync(saveImageFilePath, Buffer.from(response.data));
+        // Define regular expressions to match the JSON and image parts
+        const jsonRegex = /(?<=Content-Type: application\/json\r\nContent-Disposition: form-data; name="response"\r\n\r\n).*?(?=\r\n--)/gs;
+        const imageRegex = /(?<=Content-Type: image\/jpeg\r\nContent-Disposition: form-data; filename="gi_GEN_IMAGE_0"; name="gi_GEN_IMAGE_0"\r\n\r\n).*?(?=\r\n--)/gs;
 
-            parseAxiosResponse(response, saveImageFilePath);
-        } else {
-            // Handle other types of responses
-            console.log(response.data);
-        }
+        // Extract the JSON part
+        const jsonPart = responseText.match(jsonRegex)[0];
+        const jsonData = JSON.parse(jsonPart);
+
+        // Extract the image part
+        const imagePart = responseText.match(imageRegex)[0];
+        const imageBlob1 = new Blob([imagePart], { type: 'image/jpeg' });
+
+        uploadImageFromBlob(imageBlob1);
+
+        // Use the parsed JSON and image data as needed
+        /*const imageUrl = URL.createObjectURL(imageBlob1);
+        // const imageElement = document.getElementById('imagePreview');
+        // imageElement.src = imageUrl;
+        const downloadLink = document.createElement('a');
+        downloadLink.href = imageUrl;
+        downloadLink.download = 'image.jpg'; // Change the filename as desired
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);*/
     } catch (error) {
         console.error(error);
     }
 }
 
-async function parseAxiosResponse(response, saveImageFilePath) {
-    const responseData = response.data;
-    const boundaryRegex = /--(\S+)/.exec(responseData);
-    const bound = `--${boundaryRegex}--` ? boundaryRegex[1] : null;
-    const parts2 = responseData.split('name="gi_GEN_IMAGE_0"');
-
-    // const parts = responseData.split('--+');
-
-    const imagePart = parts2[2].split('\r\n\r\n')[1].split(bound)[0];
-
-    const imageBuffer = Buffer.from(imagePart, 'binary');
-
-    // Save the image data to a file.
-    //await fs.promises.writeFile(saveImageFilePath, imageBuffer);
-
-    console.log('Image saved to file:', saveImageFilePath);
-}
-
-async function processMultipartEntity(entity, saveImageFilePath) {
-    const contentType = entity.headers.get('content-type');
-    const boundary = contentType.split('boundary=')[1];
-
-    const formData = new FormData();
-
-    const partHeaders = [];
-    let partData = Buffer.from([]);
-
-    // Change the import statement to dynamic import
-    const getStream = (await import('get-stream')).default;
-
-    const collectChunks = async (readable) => Buffer.from(await getStream(readable));
-
-    const bodyContent = await collectChunks(entity.data);
-
-    let offset = 0;
-    while (offset < bodyContent.length) {
-        const boundaryIndex = bodyContent.indexOf(boundary, offset);
-        if (boundaryIndex !== -1) {
-            if (partHeaders.length > 0) {
-                formData.append('part', partData, {
-                    header: partHeaders.join('\r\n'),
-                });
-            }
-
-            partHeaders.length = 0;
-            partData = Buffer.from([]);
-            offset = boundaryIndex + boundary.length;
-        } else if (partHeaders.length === 0) {
-            const lineEndIndex = bodyContent.indexOf('\r\n', offset);
-            if (lineEndIndex !== -1) {
-                partHeaders.push(bodyContent.slice(offset, lineEndIndex).toString());
-                offset = lineEndIndex + 2;
-            } else {
-                break; // Not enough data to parse headers, wait for more chunks
-            }
-        } else {
-            const nextBoundaryIndex = bodyContent.indexOf(boundary, offset);
-            if (nextBoundaryIndex !== -1) {
-                partData = Buffer.concat([partData, bodyContent.slice(offset, nextBoundaryIndex)]);
-                offset = nextBoundaryIndex;
-            } else {
-                partData = Buffer.concat([partData, bodyContent.slice(offset)]);
-                break;
-            }
-        }
+async function uploadImageFromBlob(blob) {
+    const imageUrl = 'https://raw.githubusercontent.com/anagarwa/adobe-screens-brandads/main/content/dam/ads/mdsrimages/ad4/1.png';
+    // Download the image from the URL
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+        throw new Error('Failed to download the image.');
     }
 
+    const imageBlob = await response.blob();
+    const { size, type } = imageBlob;
+    console.log(`IMG1 Type: ${type}\n🌌 IMG Size: ${size}`);
+
+    const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderID}:/testimage.jpeg}:/content`;
+
+    const uploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': imageBlob.type
+        },
+        body: imageBlob
+    });
+    if (uploadResponse.ok) {
+        const response = await uploadResponse.json();
+        console.log('Image has been uploaded');
+    } else {
+        console.log('here 4');
+    }
 }
+
+
+
+
+
+
+
 
 
 export async function connect(callback) {
