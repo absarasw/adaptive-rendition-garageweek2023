@@ -13,7 +13,7 @@ const apiEndpoint = 'https://firefly.adobe.io/spl';
 
 
 
-async function sendMultipartRequest(imageFile) {
+async function sendMultipartRequest() {
     const formData = new FormData();
     formData.boundary = boundary;
     formData.append('request', jsonContent, {
