@@ -6,7 +6,7 @@ import fs from "fs";
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
 const driveIDGlobal = 'b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1';
-const folderID = '01DF7GY2ZKRI4FWKGI7FG3YBSYGI3NJ4Y6';
+const folderID = '01DF7GY26OP3TGBGEQJVHLMHAETWTTMQEG';
 let connectAttempts = 0;
 let accessToken;
 
@@ -33,9 +33,9 @@ const sp = {
 
 //const downloadUrl = 'https://images.pexels.com/photos/60597/dahlia-red-blossom-bloom-60597.jpeg?cs=srgb&dl=pexels-pixabay-60597.jpg&fm=jpg&_gl=1*1v7pi2k*_ga*MTM1Mjc3OTgzOS4xNjkwMzAxOTY2*_ga_8JE65Q40S6*MTY5MDMwMTk2Ni4xLjEuMTY5MDMwMTk4NC4wLjAuMA..'; // Replace with the URL of the binary file you want to download
 const downloadUrl = 'https://main--adaptive-rendition-garageweek2023--absarasw.hlx.live/wallpaper.jpeg';
+const hostname = 'https://adaptive-renditions.aem-screens.com';
+const folderPath = 'content/screens/assets';
 
-const boundary = `--------------------------${Date.now()}`;
-const imageFile = '';
 
 // const jsonContent = '{\"graph\":{\"uri\":\"urn:graph:MultiDiffusion_outpaint_v3\"},\"params\":[{\"name\":\"gi_MODE\",\"value\":\"ginp\",\"type\":\"string\"},{\"name\":\"gi_SEED\",\"value\":[{\"name\":\"0\",\"value\":78841,\"type\":\"scalar\"},{\"name\":\"1\",\"value\":11158,\"type\":\"scalar\"},{\"name\":\"2\",\"value\":81232,\"type\":\"scalar\"},{\"name\":\"3\",\"value\":26310,\"type\":\"scalar\"}],\"type\":\"array\"},{\"name\":\"gi_NUM_STEPS\",\"value\":70,\"type\":\"scalar\"},{\"name\":\"gi_GUIDANCE\",\"value\":6,\"type\":\"scalar\"},{\"name\":\"gi_ENABLE_PROMPT_FILTER\",\"value\":true,\"type\":\"boolean\"},{\"name\":\"gi_OUTPUT_WIDTH\",\"value\":1408,\"type\":\"scalar\"},{\"name\":\"gi_OUTPUT_HEIGHT\",\"value\":1024,\"type\":\"scalar\"},{\"name\":\"gi_AR_SHIFT\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_AR_DILATE\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_ADVANCED\",\"value\":\"{\\\"enable_mts\\\":true}\",\"type\":\"string\"}],\"inputs\":{\"gi_IMAGE\":{\"id\":\"a8226039-72c4-4bf3-bae1-faaca5561347\",\"toStore\":{\"lifeCycle\":\"session\"},\"type\":\"image\"}},\"outputs\":{\"gi_GEN_IMAGE\":{\"type\":\"array\",\"expectedMimeType\":\"image\\/jpeg\",\"expectedArrayLength\":1,\"id\":\"74c63a43-1a7b-4d0b-b950-75f3ba97adf8\"},\"gi_GEN_STATUS\":{\"type\":\"array\",\"id\":\"0ef7ad76-9aa6-4f5c-b7dc-43bb0f3ed1fd\"}}}';
 
@@ -47,6 +47,7 @@ const apiEndpoint = 'https://firefly.adobe.io/spl';
 async function sendMultipartRequest() {
     const formData = new FormData();
 
+    const downloadUrl = hostname + "/" + folderPath + "/1.jpeg";
     const imageBuffer = await fetch(downloadUrl).then((response) => response.arrayBuffer());
     const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });
     formData.append('gi_IMAGE', imageBlob, 'blob');
@@ -68,13 +69,13 @@ async function sendMultipartRequest() {
         const responseData = await response.formData();
         const blob = responseData.get('gi_GEN_IMAGE_0');
 
-        await uploadImageFromBlob(blob);
+        await uploadImageFromBlob(blob, folderID);
     } catch (error) {
         console.error(error);
     }
 }
 
-async function uploadImageFromBlob(imageBlob) {
+async function uploadImageFromBlob(imageBlob, folderID) {
     const { size, type } = imageBlob;
     console.log(`IMG1 Type: ${type}\n IMG Size: ${size}`);
 
@@ -168,8 +169,13 @@ export async function PublishAndNotify() {
     // }
     //await uploadDocumentFile(folderID);
     //await sendMultipartRequest();
-    const parentFolderPath = 'abhinavscreens/content/screens/assets';
-    await getFolderID(parentFolderPath);
+    const parentFolderPath = 'abhinavscreens/' + folderPath;
+
+    console.log("Creating children folder under + " + parentFolderPath);
+    await createFolder();
+
+    console.log("Children folder ID in next line");
+    await getFolderID(parentFolderPath + "/children");
 }
 
 
