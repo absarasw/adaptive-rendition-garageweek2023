@@ -167,7 +167,9 @@ export async function PublishAndNotify() {
     //     return 'updated';
     // }
     //await uploadDocumentFile(folderID);
-    await sendMultipartRequest();
+    //await sendMultipartRequest();
+    const parentFolderPath = 'abhinavscreens/content/screens/assets';
+    await getFolderID(parentFolderPath);
 }
 
 
@@ -275,11 +277,11 @@ async function createFolder() {
     return response.id;
 }
 
-async function getFolderID() {
+async function getFolderID(parentFolderPath) {
     try {
         validateConnnection();
         const options = getRequestOption();
-        const parentFolderPath = 'abhinavscreens';
+        //const parentFolderPath = 'abhinavscreens/content/screens/assets';
         const getByPathUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/root:/${parentFolderPath}:/`;
         const driveResponse = await fetch(getByPathUrl, options);
         const response = await driveResponse.json();
@@ -290,7 +292,7 @@ async function getFolderID() {
         throw new Error('Failed to retrieve folder ID');
     }
 }
-async function quickpublish() {
+async function quickpublish(path) {
     console.log('in quick publish8');
     console.log(`Quick Publish Started ${new Date().toLocaleString()}`);
 
