@@ -31,8 +31,8 @@ const sp = {
 
 
 
-const downloadUrl = 'https://images.pexels.com/photos/60597/dahlia-red-blossom-bloom-60597.jpeg?cs=srgb&dl=pexels-pixabay-60597.jpg&fm=jpg&_gl=1*1v7pi2k*_ga*MTM1Mjc3OTgzOS4xNjkwMzAxOTY2*_ga_8JE65Q40S6*MTY5MDMwMTk2Ni4xLjEuMTY5MDMwMTk4NC4wLjAuMA..'; // Replace with the URL of the binary file you want to download
-
+//const downloadUrl = 'https://images.pexels.com/photos/60597/dahlia-red-blossom-bloom-60597.jpeg?cs=srgb&dl=pexels-pixabay-60597.jpg&fm=jpg&_gl=1*1v7pi2k*_ga*MTM1Mjc3OTgzOS4xNjkwMzAxOTY2*_ga_8JE65Q40S6*MTY5MDMwMTk2Ni4xLjEuMTY5MDMwMTk4NC4wLjAuMA..'; // Replace with the URL of the binary file you want to download
+const downloadUrl = 'https://main--adaptive-rendition-garageweek2023--absarasw.hlx.live/wallpaper.jpeg';
 
 const boundary = `--------------------------${Date.now()}`;
 const imageFile = '';
