@@ -65,35 +65,10 @@ async function sendMultipartRequest() {
             },
             body: formData,
         });
+        const responseData = await response.formData();
+        const blob = responseData.get('gi_GEN_IMAGE_0');
 
-        // Handle the response
-        /*const responseText = await response.text();
-
-        // Define regular expressions to match the JSON and image parts
-        const jsonRegex = /(?<=Content-Type: application\/json\r\nContent-Disposition: form-data; name="response"\r\n\r\n).*?(?=\r\n--)/gs;
-        const imageRegex = /(?<=Content-Type: image\/jpeg\r\nContent-Disposition: form-data; filename="gi_GEN_IMAGE_0"; name="gi_GEN_IMAGE_0"\r\n\r\n).*?(?=\r\n--)/gs;
-
-        // Extract the JSON part
-        const jsonPart = responseText.match(jsonRegex)[0];
-        const jsonData = JSON.parse(jsonPart);
-
-        // Extract the image part
-        const imagePart = responseText.match(imageRegex)[0];
-        const imageBlob1 = new Blob([imagePart], { type: 'image/jpeg' });
-
-        uploadImageFromBlob(imageBlob1);*/
-        await processMultipartEntity_1(response);
-
-        // Use the parsed JSON and image data as needed
-        /*const imageUrl = URL.createObjectURL(imageBlob1);
-        // const imageElement = document.getElementById('imagePreview');
-        // imageElement.src = imageUrl;
-        const downloadLink = document.createElement('a');
-        downloadLink.href = imageUrl;
-        downloadLink.download = 'image.jpg'; // Change the filename as desired
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);*/
+        await uploadImageFromBlob(blob);
     } catch (error) {
         console.error(error);
     }
@@ -120,42 +95,6 @@ async function uploadImageFromBlob(imageBlob) {
         console.log('here 4');
     }
 }
-
-async function processMultipartEntity_1(entity) {
-    const contentType = entity.headers.get('content-type');
-    const boundary = contentType.split('boundary=')[1];
-    const multipart = require('parse-multipart-data');
-    const getStream = (await import('get-stream')).default;
-
-    //const collectChunks = async (readable) => Buffer.from(await getStream(readable));
-
-    //const bodyContent = await collectChunks(entity.body);
-
-    const parts = multipart.parse(entity.body, boundary);
-
-    for (let i = 0; i < parts.length; i++) {
-        const part = parts[i];
-        if(part.name && part.name.includes('gi_GEN_IMAGE')) {
-            const data = part.data;
-            const buffer = Buffer.from(data);
-
-
-            const blob = new Blob([buff]);
-            uploadImageFromBlob(blob);
-
-            /*fs.writeFile(saveImageFilePath + 'image_1.jpeg', data, {encoding: 'utf-8'}, function (err) {
-              if (err) throw err;
-              console.log('It\'s saved!');
-            });*/
-
-        }
-        // will be: { filename: 'A.txt', type: 'text/plain', data: <Buffer 41 41 41 41 42 42 42 42> }
-    }
-}
-
-
-
-
 
 
 
