@@ -41,10 +41,13 @@ const folderPath = 'content/screens/assets';
 
 const jsonContent = '{\"graph\":{\"uri\":\"urn:graph:MultiDiffusion_outpaint_v3\"},\"params\":[{\"name\":\"gi_MODE\",\"value\":\"ginp\",\"type\":\"string\"},{\"name\":\"gi_SEED\",\"value\":[{\"name\":\"0\",\"value\":78841,\"type\":\"scalar\"}],\"type\":\"array\"},{\"name\":\"gi_NUM_STEPS\",\"value\":70,\"type\":\"scalar\"},{\"name\":\"gi_GUIDANCE\",\"value\":6,\"type\":\"scalar\"},{\"name\":\"gi_ENABLE_PROMPT_FILTER\",\"value\":true,\"type\":\"boolean\"},{\"name\":\"gi_OUTPUT_WIDTH\",\"value\":1408,\"type\":\"scalar\"},{\"name\":\"gi_OUTPUT_HEIGHT\",\"value\":1024,\"type\":\"scalar\"},{\"name\":\"gi_AR_SHIFT\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_AR_DILATE\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_ADVANCED\",\"value\":\"{\\\"enable_mts\\\":true}\",\"type\":\"string\"}],\"inputs\":{\"gi_IMAGE\":{\"id\":\"a8226039-72c4-4bf3-bae1-faaca5561347\",\"toStore\":{\"lifeCycle\":\"session\"},\"type\":\"image\"}},\"outputs\":{\"gi_GEN_IMAGE\":{\"type\":\"array\",\"expectedMimeType\":\"image\\/jpeg\",\"expectedArrayLength\":1,\"id\":\"74c63a43-1a7b-4d0b-b950-75f3ba97adf8\"},\"gi_GEN_STATUS\":{\"type\":\"array\",\"id\":\"0ef7ad76-9aa6-4f5c-b7dc-43bb0f3ed1fd\"}}}';
 
+const jsonContentPortrait = '{\"graph\":{\"uri\":\"urn:graph:MultiDiffusion_outpaint_v3\"},\"params\":[{\"name\":\"gi_MODE\",\"value\":\"ginp\",\"type\":\"string\"},{\"name\":\"gi_SEED\",\"value\":[{\"name\":\"0\",\"value\":78841,\"type\":\"scalar\"}],\"type\":\"array\"},{\"name\":\"gi_NUM_STEPS\",\"value\":70,\"type\":\"scalar\"},{\"name\":\"gi_GUIDANCE\",\"value\":6,\"type\":\"scalar\"},{\"name\":\"gi_ENABLE_PROMPT_FILTER\",\"value\":true,\"type\":\"boolean\"},{\"name\":\"gi_OUTPUT_WIDTH\",\"value\":1024,\"type\":\"scalar\"},{\"name\":\"gi_OUTPUT_HEIGHT\",\"value\":1408,\"type\":\"scalar\"},{\"name\":\"gi_AR_SHIFT\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_AR_DILATE\",\"value\":0,\"type\":\"scalar\"},{\"name\":\"gi_ADVANCED\",\"value\":\"{\\\"enable_mts\\\":true}\",\"type\":\"string\"}],\"inputs\":{\"gi_IMAGE\":{\"id\":\"a8226039-72c4-4bf3-bae1-faaca5561347\",\"toStore\":{\"lifeCycle\":\"session\"},\"type\":\"image\"}},\"outputs\":{\"gi_GEN_IMAGE\":{\"type\":\"array\",\"expectedMimeType\":\"image\\/jpeg\",\"expectedArrayLength\":1,\"id\":\"74c63a43-1a7b-4d0b-b950-75f3ba97adf8\"},\"gi_GEN_STATUS\":{\"type\":\"array\",\"id\":\"0ef7ad76-9aa6-4f5c-b7dc-43bb0f3ed1fd\"}}}';
+
 const firefly_accessToken = 'eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjoiaW1zX25hMS1rZXktYXQtMSIsIml0dCI6ImF0In0.eyJpZCI6IjE2OTA3MjQ4NTUwODZfMTI0ZDM2NGQtNDA4Ny00NjIzLWI3YjUtMTk2MjhkMmUyZWZmX3V3MiIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJjbGllbnRfaWQiOiJjbGlvLXBsYXlncm91bmQtd2ViIiwidXNlcl9pZCI6IjgyRkMxRUNENjMxQzMzRDUwQTQ5NUMzRUA3ZWViMjBmODYzMWMwY2I3NDk1YzA2LmUiLCJzdGF0ZSI6IntcInNlc3Npb25cIjpcImh0dHBzOi8vaW1zLW5hMS5hZG9iZWxvZ2luLmNvbS9pbXMvc2Vzc2lvbi92MS9NekUzTURFMlpURXRabVF4TkMwMFlUUTVMV0UwWTJFdFpqRTBaV0UwTWpRMk1ERmpMUzA0TWtaRE1VVkRSRFl6TVVNek0wUTFNRUUwT1RWRE0wVkFOMlZsWWpJd1pqZzJNekZqTUdOaU56UTVOV013Tmk1bFwifSIsImFzIjoiaW1zLW5hMSIsImFhX2lkIjoiMzQ4RjcyMzE1QTE1NDBEQjBBNDk1RUZFQGFkb2JlLmNvbSIsImN0cCI6MCwiZmciOiJYVTRCVzNVT1hQUDdNUDZLR09RVjNYQUFQQT09PT09PSIsInNpZCI6IjE2OTA1NDY5NTYwOTVfNjAzZDM2NDItMzc0Ny00Y2RkLTk5YTctZWUxYjg4NzcxMGYxX3V3MiIsIm1vaSI6IjIzNzJkNTJhIiwicGJhIjoiTWVkU2VjTm9FVixMb3dTZWMiLCJleHBpcmVzX2luIjoiODY0MDAwMDAiLCJzY29wZSI6IkFkb2JlSUQsb3BlbmlkLGZpcmVmbHlfYXBpIiwiY3JlYXRlZF9hdCI6IjE2OTA3MjQ4NTUwODYifQ.HrAsRwkyGp3dDpDkOtYsgfh1fm4KHj1UbXL_9Ta4dC2T7jVt2OnbeJa2ZIhN5dL7PzorSdhlAHVlrwdfQz-S5hIfPwvtYERd-biUp95dZpuES3jtFEWghugfKcMTOHIYTYvweRCOuAOroAl_mmavv6RBTT_VL13DoGoL4_i7xD0zSD2k2utJ8m8gtLb3hCGttHbDhq4PNhsjaOnLmuXI6cOcl-HJ0MTXHPkGCJ62unf8Nw-CINcw3pWFMWuBuuTnd5sB835AJOXhRzfZDeVvxOTCjaEx9Wgz6Eql8A_rPJfJCZ5Iy7Gr2KdbiJA6EkeCcDY6YqqoP-pFuuY2iAO7Jw';
 const apiEndpoint = 'https://firefly.adobe.io/spl';
 
-async function sendMultipartRequest(imagePath) {
+
+async function getAdaptiveRendition(jsonContent) {
     const formData = new FormData();
 
     const downloadUrl = hostname + "/" + folderPath + "/" + imagePath + ".jpg";
@@ -67,15 +70,45 @@ async function sendMultipartRequest(imagePath) {
             body: formData,
         });
         const responseData = await response.formData();
-        const blob = responseData.get('gi_GEN_IMAGE_0');
-
-        const renditionFolderId = await createFolder(imagePath + "_renditions");
-
-        const renditionName = imagePath + "_landscape";
-        await uploadImageFromBlob(blob, renditionFolderId, renditionName);
+        return responseData.get('gi_GEN_IMAGE_0');
     } catch (error) {
         console.error(error);
     }
+}
+
+async function sendMultipartRequest(imagePath) {
+    /*const formData = new FormData();
+
+    const downloadUrl = hostname + "/" + folderPath + "/" + imagePath + ".jpg";
+    const imageBuffer = await fetch(downloadUrl).then((response) => response.arrayBuffer());
+    const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });
+    formData.append('gi_IMAGE', imageBlob, 'blob');
+    const jsonBlob = new Blob([jsonContent], { type: 'application/json' });
+    formData.append('request', jsonBlob);
+    try {
+        const response = await fetch(apiEndpoint, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${firefly_accessToken}`,
+                'x-api-key': 'clio-playground-web',
+                'x-session-id': 'b2382afb-1324-44be-844e-63ef60e77cbf',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'access-control-allow-origin': '*',
+                'x-request-id': '477f762a-02c9-4f2f-ae65-ff8fcc823111',
+            },
+            body: formData,
+        });
+        const responseData = await response.formData();
+        const blob = responseData.get('gi_GEN_IMAGE_0');*/
+        const landscapeBlob = await getAdaptiveRendition(jsonContent);
+        const portraitBlob = await getAdaptiveRendition(jsonContentPortrait);
+
+        const renditionFolderId = await createFolder(imagePath + "_renditions");
+
+        const landscapeRenditionName = imagePath + "_landscape";
+        const portraitRenditionName = imagePath + "_portrait";
+        await uploadImageFromBlob(landscapeBlob, renditionFolderId, landscapeRenditionName);
+        await uploadImageFromBlob(portraitBlob, renditionFolderId, portraitRenditionName);
 }
 
 async function uploadImageFromBlob(imageBlob, folderID, imageName) {
@@ -184,8 +217,9 @@ export async function PublishAndNotify() {
     //await sendMultipartRequest();
     const parentFolderPath = 'abhinavscreens/' + folderPath;
     let i = 1;
-    if(await isAssetAvailable(i)) {
+    while(await isAssetAvailable(i)) {
         await sendMultipartRequest(i);
+        i++;
     }
 
     //await createFolder("1_renditions");
