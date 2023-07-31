@@ -140,8 +140,6 @@ async function uploadImageFromBlob(imageBlob, folderID, imageName) {
 
 
 
-
-
 export async function connect(callback) {
     const publicClientApplication = new PublicClientApplication(sp.clientApp);
 
@@ -221,7 +219,7 @@ export async function PublishAndNotify() {
     //await uploadDocumentFile(folderID);
     //await sendMultipartRequest();
     //const parentFolderPath = 'abhinavscreens/' + folderPath;
-    let i = 1;
+    let i = 6;
     while(await isAssetAvailable(i)) {
         await sendMultipartRequest(i);
         i++;
