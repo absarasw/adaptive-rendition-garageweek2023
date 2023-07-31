@@ -220,17 +220,12 @@ export async function PublishAndNotify() {
     // }
     //await uploadDocumentFile(folderID);
     //await sendMultipartRequest();
-    const parentFolderPath = 'abhinavscreens/' + folderPath;
+    //const parentFolderPath = 'abhinavscreens/' + folderPath;
     let i = 1;
     while(await isAssetAvailable(i)) {
         await sendMultipartRequest(i);
         i++;
     }
-
-    //await createFolder("1_renditions");
-
-    console.log("1_renditions folder ID in next line");
-    await getFolderID(parentFolderPath + "/1_renditions");
 }
 
 
