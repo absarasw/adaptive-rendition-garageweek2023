@@ -47,7 +47,7 @@ const firefly_accessToken = 'eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTE
 const apiEndpoint = 'https://firefly.adobe.io/spl';
 
 
-async function getAdaptiveRendition(jsonContent) {
+async function getAdaptiveRendition(imagePath, jsonContent) {
     const formData = new FormData();
 
     const downloadUrl = hostname + "/" + folderPath + "/" + imagePath + ".jpg";
@@ -100,8 +100,8 @@ async function sendMultipartRequest(imagePath) {
         });
         const responseData = await response.formData();
         const blob = responseData.get('gi_GEN_IMAGE_0');*/
-        const landscapeBlob = await getAdaptiveRendition(jsonContent);
-        const portraitBlob = await getAdaptiveRendition(jsonContentPortrait);
+        const landscapeBlob = await getAdaptiveRendition(imagePath, jsonContent);
+        const portraitBlob = await getAdaptiveRendition(imagePath, jsonContentPortrait);
 
         const renditionFolderId = await createFolder(imagePath + "_renditions");
 
