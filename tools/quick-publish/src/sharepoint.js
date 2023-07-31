@@ -109,8 +109,8 @@ async function sendMultipartRequest(imagePath) {
         const portraitRenditionName = imagePath + "_portrait";
         await uploadImageFromBlob(landscapeBlob, renditionFolderId, landscapeRenditionName);
         await uploadImageFromBlob(portraitBlob, renditionFolderId, portraitRenditionName);
-        const r1 = folderPath + "/" + imagePath + "_landscape.jpeg";
-        const r2 = folderPath + "/" + imagePath + "_portrait.jpeg";
+        const r1 = folderPath + "/" + imagePath + "_renditions/" + imagePath + "_landscape.jpeg";
+        const r2 = folderPath + "/" + imagePath + "_renditions/" + imagePath + "_portrait.jpeg";
         await quickpublish(r1);
         await quickpublish(r2);
 
