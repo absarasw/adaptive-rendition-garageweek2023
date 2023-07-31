@@ -47,7 +47,7 @@ const apiEndpoint = 'https://firefly.adobe.io/spl';
 async function sendMultipartRequest(imagePath) {
     const formData = new FormData();
 
-    const downloadUrl = hostname + "/" + folderPath + "/1.jpeg";
+    const downloadUrl = hostname + "/" + folderPath + "/" + imagePath + ".jpg";
     const imageBuffer = await fetch(downloadUrl).then((response) => response.arrayBuffer());
     const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });
     formData.append('gi_IMAGE', imageBlob, 'blob');
@@ -69,17 +69,20 @@ async function sendMultipartRequest(imagePath) {
         const responseData = await response.formData();
         const blob = responseData.get('gi_GEN_IMAGE_0');
 
-        await uploadImageFromBlob(blob, folderID);
+        const renditionFolderId = await createFolder(imagePath + "_renditions");
+
+        const renditionName = imagePath + "_landscape";
+        await uploadImageFromBlob(blob, renditionFolderId, renditionName);
     } catch (error) {
         console.error(error);
     }
 }
 
-async function uploadImageFromBlob(imageBlob, folderID) {
+async function uploadImageFromBlob(imageBlob, folderID, imageName) {
     const { size, type } = imageBlob;
     console.log(`IMG1 Type: ${type}\n IMG Size: ${size}`);
 
-    const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderID}:/testimage.jpeg:/content`;
+    const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderID}:/${imageName}.jpeg:/content`;
 
     const uploadResponse = await fetch(uploadUrl, {
         method: 'PUT',
@@ -162,6 +165,16 @@ function getRequestOption() {
     };
 }
 
+async function isAssetAvailable(i) {
+    const resourcePath = hostname + "/" + folderPath + "/" + i + ".jpg";
+    const resp = await fetch(
+        resourcePath,
+        { method: 'HEAD' }
+    );
+
+    return resp.ok;
+}
+
 export async function PublishAndNotify() {
     // const quickPublish = await quickpublish();
     // if (quickPublish === 'published') {
@@ -170,9 +183,12 @@ export async function PublishAndNotify() {
     //await uploadDocumentFile(folderID);
     //await sendMultipartRequest();
     const parentFolderPath = 'abhinavscreens/' + folderPath;
+    let i = 0;
+    if(await isAssetAvailable(i)) {
+        sendMultipartRequest(i);
+    }
 
-    console.log("Creating children folder under + " + parentFolderPath);
-    await createFolder("1_renditions");
+    //await createFolder("1_renditions");
 
     console.log("1_renditions folder ID in next line");
     await getFolderID(parentFolderPath + "/1_renditions");
