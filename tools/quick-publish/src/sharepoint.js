@@ -183,9 +183,9 @@ export async function PublishAndNotify() {
     //await uploadDocumentFile(folderID);
     //await sendMultipartRequest();
     const parentFolderPath = 'abhinavscreens/' + folderPath;
-    let i = 0;
+    let i = 1;
     if(await isAssetAvailable(i)) {
-        sendMultipartRequest(i);
+        await sendMultipartRequest(i);
     }
 
     //await createFolder("1_renditions");
