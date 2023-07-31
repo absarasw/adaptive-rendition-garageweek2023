@@ -1,0 +1,108 @@
+{
+  "version": "3.0",
+  "contentDelivery": {
+    "providers": [
+      {
+        "name": "franklin",
+        "endpoint": "/"
+      }
+    ],
+    "defaultProvider": "franklin"
+  },
+  "timestamp": 1690787529747,
+  "entries": [
+    {
+      "path": "/content/screens/garageweek/adaptiverenditions.html"
+    },
+    {
+      "path": "/content/screens/assets/1.jpg",
+      "timestamp": 1690741997000,
+      "renditions": [
+        {
+          "height": 1024,
+          "width": 1408,
+          "path": "/content/screens/assets/1_renditions/1-landscape.jpeg",
+          "name": "landscape"
+        },
+        {
+          "height": 1408,
+          "width": 1024,
+          "path": "/content/screens/assets/1_renditions/1-portrait.jpeg",
+          "name": "portrait"
+        }
+      ]
+    },
+    {
+      "path": "/content/screens/assets/2.jpg",
+      "timestamp": 1690741999000,
+      "renditions": [
+        {
+          "height": 1024,
+          "width": 1408,
+          "path": "/content/screens/assets/2_renditions/2-landscape.jpeg",
+          "name": "landscape"
+        },
+        {
+          "height": 1408,
+          "width": 1024,
+          "path": "/content/screens/assets/2_renditions/2-portrait.jpeg",
+          "name": "portrait"
+        }
+      ]
+    },
+    {
+      "path": "/content/screens/assets/3.jpg",
+      "timestamp": 1690741992000,
+      "renditions": [
+        {
+          "height": 1024,
+          "width": 1408,
+          "path": "/content/screens/assets/3_renditions/3-landscape.jpeg",
+          "name": "landscape"
+        },
+        {
+          "height": 1408,
+          "width": 1024,
+          "path": "/content/screens/assets/3_renditions/3-portrait.jpeg",
+          "name": "portrait"
+        }
+      ]
+    },
+    {
+      "path": "/content/screens/assets/4.jpg",
+      "timestamp": 1690741998000,
+      "renditions": [
+        {
+          "height": 1024,
+          "width": 1408,
+          "path": "/content/screens/assets/4_renditions/4-landscape.jpeg",
+          "name": "landscape"
+        },
+        {
+          "height": 1408,
+          "width": 1024,
+          "path": "/content/screens/assets/4_renditions/4-portrait.jpeg",
+          "name": "portrait"
+        }
+      ]
+    },
+    {
+      "path": "/content/screens/assets/5.jpg",
+      "timestamp": 1690780994000,
+      "renditions": [
+        {
+          "height": 1024,
+          "width": 1408,
+          "path": "/content/screens/assets/5_renditions/5-landscape.jpeg",
+          "name": "landscape"
+        },
+        {
+          "height": 1408,
+          "width": 1024,
+          "path": "/content/screens/assets/5_renditions/5-portrait.jpeg",
+          "name": "portrait"
+        }
+      ]
+    }
+  ]
+}

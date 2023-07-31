@@ -1,0 +1,24 @@
+{
+  "channels": [
+    {
+      "manifestPath": "/content/screens/garageweek/adaptiverenditions.manifest.json",
+      "lastModified": "2023-07-31T05:23:14.000Z",
+      "hierarchy": [
+        {
+          "title": "screens",
+          "path": "/content/screens"
+        },
+        {
+          "title": "garageweek",
+          "path": "/content/screens/garageweek"
+        }
+      ],
+      "externalId": "/content/screens/garageweek/adaptiverenditions",
+      "title": "Adaptive-renditions",
+      "liveUrl": "https://adaptive-renditions.aem-screens.com/content/screens/garageweek/adaptiverenditions.html"
+    }
+  ],
+  "metadata": {
+    "providerType": "franklin"
+  }
+}
