@@ -9,10 +9,11 @@
     ],
     "defaultProvider": "franklin"
   },
-  "timestamp": 1690787529747,
+  "timestamp": 1690813079789,
   "entries": [
     {
-      "path": "/content/screens/garageweek/adaptiverenditions.html"
+      "path": "/content/screens/garageweek/adaptiverenditions.html",
+      "timestamp": 1690787535000
     },
     {
       "path": "/content/screens/assets/1.jpg",
