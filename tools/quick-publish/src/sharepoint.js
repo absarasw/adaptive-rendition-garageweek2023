@@ -10,8 +10,8 @@ const folderID = '01DF7GY26OP3TGBGEQJVHLMHAETWTTMQEG';
 let connectAttempts = 0;
 let accessToken;
 
-const orgName = 'hlxsites';
-const repoName = 'fcbayern';
+const orgName = 'absarasw';
+const repoName = 'adaptive-rendition-garageweek2023';
 const ref = 'main';
 const path = 'de/spiele/profis/bundesliga/2022-2023/sv-werder-bremen-fc-bayern-muenchen-06-05-2023/liveticker';
 const mockNotificationService = 'https://288650-257ambermackerel.adobeio-static.net/api/v1/web/brandads/getads';
@@ -109,6 +109,11 @@ async function sendMultipartRequest(imagePath) {
         const portraitRenditionName = imagePath + "_portrait";
         await uploadImageFromBlob(landscapeBlob, renditionFolderId, landscapeRenditionName);
         await uploadImageFromBlob(portraitBlob, renditionFolderId, portraitRenditionName);
+        const r1 = folderPath + "/" + imagePath + "_landscape.jpeg";
+        const r2 = folderPath + "/" + imagePath + "_portrait.jpeg";
+        await quickpublish(r1);
+        await quickpublish(r2);
+
 }
 
 async function uploadImageFromBlob(imageBlob, folderID, imageName) {
@@ -348,8 +353,43 @@ async function getFolderID(parentFolderPath) {
         throw new Error('Failed to retrieve folder ID');
     }
 }
+
 async function quickpublish(path) {
-    console.log('in quick publish8');
+    console.log('in quick publish ' + path);
+    console.log(`Quick Publish Started ${new Date().toLocaleString()}`);
+
+    let response;
+    const options = {
+        method: 'POST',
+    };
+
+    response = await fetch(`https://admin.hlx.page/preview/${orgName}/${repoName}/${ref}/${path}`, options);
+
+    if (response.ok) {
+        console.log(`Document Previewed at ${new Date().toLocaleString()}`);
+    } else {
+        throw new Error(`Could not previewed. Status: ${response.status}`);
+    }
+
+    response = await fetch(`https://admin.hlx.page/live/${orgName}/${repoName}/${ref}/${path}`, options);
+
+    if (response.ok) {
+        console.log(`Document Published at ${new Date().toLocaleString()}`);
+    } else {
+        throw new Error(`Could not published. Status: ${response.status}`);
+    }
+
+    response = await fetch(`https://admin.hlx.page/cache/${orgName}/${repoName}/${ref}/${path}`, options);
+
+    if (response.ok) {
+        console.log(`Purge cache ${new Date().toLocaleString()}`);
+    } else {
+        throw new Error(`Could not purge cache. Status: ${response.status}`);
+    }
+}
+
+async function quickpublish_1(path) {
+    console.log('in quick publish');
     console.log(`Quick Publish Started ${new Date().toLocaleString()}`);
 
     let response;
