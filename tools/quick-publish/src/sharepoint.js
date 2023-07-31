@@ -44,7 +44,7 @@ const jsonContent = '{\"graph\":{\"uri\":\"urn:graph:MultiDiffusion_outpaint_v3\
 const firefly_accessToken = 'eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjoiaW1zX25hMS1rZXktYXQtMSIsIml0dCI6ImF0In0.eyJpZCI6IjE2OTA3MjQ4NTUwODZfMTI0ZDM2NGQtNDA4Ny00NjIzLWI3YjUtMTk2MjhkMmUyZWZmX3V3MiIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJjbGllbnRfaWQiOiJjbGlvLXBsYXlncm91bmQtd2ViIiwidXNlcl9pZCI6IjgyRkMxRUNENjMxQzMzRDUwQTQ5NUMzRUA3ZWViMjBmODYzMWMwY2I3NDk1YzA2LmUiLCJzdGF0ZSI6IntcInNlc3Npb25cIjpcImh0dHBzOi8vaW1zLW5hMS5hZG9iZWxvZ2luLmNvbS9pbXMvc2Vzc2lvbi92MS9NekUzTURFMlpURXRabVF4TkMwMFlUUTVMV0UwWTJFdFpqRTBaV0UwTWpRMk1ERmpMUzA0TWtaRE1VVkRSRFl6TVVNek0wUTFNRUUwT1RWRE0wVkFOMlZsWWpJd1pqZzJNekZqTUdOaU56UTVOV013Tmk1bFwifSIsImFzIjoiaW1zLW5hMSIsImFhX2lkIjoiMzQ4RjcyMzE1QTE1NDBEQjBBNDk1RUZFQGFkb2JlLmNvbSIsImN0cCI6MCwiZmciOiJYVTRCVzNVT1hQUDdNUDZLR09RVjNYQUFQQT09PT09PSIsInNpZCI6IjE2OTA1NDY5NTYwOTVfNjAzZDM2NDItMzc0Ny00Y2RkLTk5YTctZWUxYjg4NzcxMGYxX3V3MiIsIm1vaSI6IjIzNzJkNTJhIiwicGJhIjoiTWVkU2VjTm9FVixMb3dTZWMiLCJleHBpcmVzX2luIjoiODY0MDAwMDAiLCJzY29wZSI6IkFkb2JlSUQsb3BlbmlkLGZpcmVmbHlfYXBpIiwiY3JlYXRlZF9hdCI6IjE2OTA3MjQ4NTUwODYifQ.HrAsRwkyGp3dDpDkOtYsgfh1fm4KHj1UbXL_9Ta4dC2T7jVt2OnbeJa2ZIhN5dL7PzorSdhlAHVlrwdfQz-S5hIfPwvtYERd-biUp95dZpuES3jtFEWghugfKcMTOHIYTYvweRCOuAOroAl_mmavv6RBTT_VL13DoGoL4_i7xD0zSD2k2utJ8m8gtLb3hCGttHbDhq4PNhsjaOnLmuXI6cOcl-HJ0MTXHPkGCJ62unf8Nw-CINcw3pWFMWuBuuTnd5sB835AJOXhRzfZDeVvxOTCjaEx9Wgz6Eql8A_rPJfJCZ5Iy7Gr2KdbiJA6EkeCcDY6YqqoP-pFuuY2iAO7Jw';
 const apiEndpoint = 'https://firefly.adobe.io/spl';
 
-async function sendMultipartRequest() {
+async function sendMultipartRequest(imagePath) {
     const formData = new FormData();
 
     const downloadUrl = hostname + "/" + folderPath + "/1.jpeg";
@@ -172,10 +172,10 @@ export async function PublishAndNotify() {
     const parentFolderPath = 'abhinavscreens/' + folderPath;
 
     console.log("Creating children folder under + " + parentFolderPath);
-    await createFolder();
+    await createFolder("1_renditions");
 
-    console.log("Children folder ID in next line");
-    await getFolderID(parentFolderPath + "/children");
+    console.log("1_renditions folder ID in next line");
+    await getFolderID(parentFolderPath + "/1_renditions");
 }
 
 
@@ -258,10 +258,10 @@ function getImageFileName(imageUrl) {
     return parts[parts.length - 1];
 }
 
-async function createFolder() {
+async function createFolder(folderName) {
     validateConnnection();
     const folderData = {
-        name: "images",
+        name: folderName,
         folder: {},
         "@microsoft.graph.conflictBehavior": "rename"
     };
