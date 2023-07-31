@@ -9,11 +9,11 @@
     ],
     "defaultProvider": "franklin"
   },
-  "timestamp": 1690816378307,
+  "timestamp": 1690817818703,
   "entries": [
     {
       "path": "/content/screens/garageweek/adaptiverenditions.html",
-      "timestamp": 1690816375854
+      "timestamp": 1690817814303
     },
     {
       "path": "/content/screens/assets/1.jpg",
@@ -101,6 +101,24 @@
           "height": 1408,
           "width": 1024,
           "path": "/content/screens/assets/5_renditions/5-portrait.jpeg",
+          "name": "portrait"
+        }
+      ]
+    },
+    {
+      "path": "/content/screens/assets/6.jpg",
+      "timestamp": 1690815308000,
+      "renditions": [
+        {
+          "height": 1024,
+          "width": 1408,
+          "path": "/content/screens/assets/6_renditions/6-landscape.jpeg",
+          "name": "landscape"
+        },
+        {
+          "height": 1408,
+          "width": 1024,
+          "path": "/content/screens/assets/6_renditions/6-portrait.jpeg",
           "name": "portrait"
         }
       ]
