@@ -9,15 +9,15 @@
     ],
     "defaultProvider": "franklin"
   },
-  "timestamp": 1690813079789,
+  "timestamp": 1690869592315,
   "entries": [
     {
       "path": "/content/screens/garageweek/adaptiverenditions.html",
-      "timestamp": 1690787535000
+      "timestamp": 1690866653000
     },
     {
       "path": "/content/screens/assets/1.jpg",
-      "timestamp": 1690741997000,
+      "timestamp": 1690780991000,
       "renditions": [
         {
           "height": 1024,
