@@ -16,6 +16,23 @@
       "externalId": "/content/screens/garageweek/adaptiverenditions",
       "title": "Adaptive-renditions",
       "liveUrl": "https://adaptive-renditions.aem-screens.com/content/screens/garageweek/adaptiverenditions.html"
+    },
+    {
+      "manifestPath": "/content/screens/garageweek/purge-cache-check-001.manifest.json",
+      "lastModified": "2023-08-02T10:48:57.656Z",
+      "hierarchy": [
+        {
+          "title": "screens",
+          "path": "/content/screens"
+        },
+        {
+          "title": "garageweek",
+          "path": "/content/screens/garageweek"
+        }
+      ],
+      "externalId": "/content/screens/garageweek/purge-cache-check-001",
+      "title": "Purge Cache Check 001",
+      "liveUrl": "https://adaptive-renditions.aem-screens.com/content/screens/garageweek/purge-cache-check-001.html"
     }
   ],
   "metadata": {
