@@ -219,10 +219,28 @@ export async function PublishAndNotify() {
     //await uploadDocumentFile(folderID);
     //await sendMultipartRequest();
     //const parentFolderPath = 'abhinavscreens/' + folderPath;
-    let i = 6;
-    while(await isAssetAvailable(i)) {
-        await sendMultipartRequest(i);
-        i++;
+    //let i = 6;
+    //while(await isAssetAvailable(i)) {
+        //await sendMultipartRequest(i);
+        //i++;
+    //}
+
+    const folderId = getFolderID('content/screens/garageweek');
+    const endpoint = `/drives/${driveIDGlobal}/items/${folderId}:/oldfile.docx:/content`;
+
+    validateConnnection();
+
+    const options = getRequestOption();
+    options.method = 'GET';
+    options.headers.append('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+
+    const response = await fetch(`${graphURL}${endpoint}`, options);
+
+    if (response.ok) {
+        const text = await response.text();
+        console.log('-----' + text + '------');
+    } else {
+        console.log('request failed');
     }
 }
 
