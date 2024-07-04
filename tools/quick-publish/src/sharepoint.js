@@ -225,7 +225,7 @@ export async function PublishAndNotify() {
         //i++;
     //}
 
-    const folderId = getFolderID('content/screens/garageweek');
+    const folderId = await getFolderID('content/screens/garageweek');
     const endpoint = `/drives/${driveIDGlobal}/items/${folderId}:/oldfile.docx:/content`;
 
     validateConnnection();
