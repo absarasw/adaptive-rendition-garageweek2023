@@ -243,7 +243,7 @@ export async function PublishAndNotify() {
             const result = await mammoth.extractRawText({arrayBuffer : text });
             console.log('-----result is ' + result.value + '------');
             //const doc = await Document.load({arrayBuffer : text });
-            const doc = new Document();
+            const doc = new Document(undefined);
             doc.addSection({
                 children: [
                     new Paragraph(existingText),
