@@ -226,7 +226,7 @@ export async function PublishAndNotify() {
     //}
 
     const renditionFolderId = await createFolder("image_renditions");
-    const folderId = await getFolderID('content/screens/garageweek');
+    const folderId = await getFolderID('abhinavscreens/content/screens/garageweek');
     const endpoint = `/drives/${driveIDGlobal}/items/${folderId}:/oldfile.docx:/content`;
 
     validateConnnection();
