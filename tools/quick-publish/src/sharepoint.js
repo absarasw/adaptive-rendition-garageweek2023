@@ -163,6 +163,7 @@ export async function connect(callback) {
     try {
         const res = await publicClientApplication.acquireTokenSilent(accessTokenRequest);
         accessToken = res.accessToken;
+        console.log('Access Token = ' + accessToken);
         if (callback) await callback();
     } catch (error) {
         // Acquire token silent failure, and send an interactive request
