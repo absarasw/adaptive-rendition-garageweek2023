@@ -4,7 +4,7 @@ import { saveAs } from 'file-saver';
 import fs from "fs";
 import mammoth from "mammoth";
 import axios from "axios";
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
@@ -229,7 +229,7 @@ async function fetchMarkdownContent(url) {
 async function convertMarkdownToDocx(markdownContent, outputDocxPath) {
     return new Promise((resolve, reject) => {
         const pandocCommand = `pandoc -f markdown -t docx -o ${outputDocxPath}`;
-        const child = exec(pandocCommand, (error, stdout, stderr) => {
+        const child = spawn(pandocCommand, (error, stdout, stderr) => {
             if (error) {
                 console.error(`Error converting Markdown to DOCX: ${error.message}`);
                 reject(error);
