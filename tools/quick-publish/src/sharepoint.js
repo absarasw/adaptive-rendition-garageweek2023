@@ -241,7 +241,37 @@ export async function PublishAndNotify() {
         const text = await response.arrayBuffer();
         try {
             const result = await mammoth.extractRawText({arrayBuffer : text });
-            console.log('-----result is ' + result + '------');
+            console.log('-----result is ' + result.value + '------');
+            const doc = await Document.load({arrayBuffer : text });
+            doc.addSection({
+                children: [
+                    new Paragraph({
+                        text: "New Heading 1",
+                        heading: HeadingLevel.HEADING_1
+                    }),
+                    new Paragraph({
+                        text: "This is a new paragraph text under the new heading."
+                    })
+                ]
+            });
+            const buffer = await Packer.toBuffer(doc);
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+
+            const uploadResponse = await fetch(`${graphURL}${endpoint}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                },
+                body: blob
+            });
+            if (uploadResponse.ok) {
+                const response = await uploadResponse.json();
+                console.log('Document has been uploaded oldfile ' + response);
+            } else {
+                console.log('here 4');
+            }
+
             return result.value;
         } catch (error) {
             console.error(error);
