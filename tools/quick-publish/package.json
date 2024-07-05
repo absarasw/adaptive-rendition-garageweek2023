@@ -33,7 +33,7 @@
     "@spectrum-icons/ui": "^3.3.3",
     "@spectrum-icons/workflow": "^4.0.3",
     "axios": "^1.4.0",
-    "docx": "^8.2.2",
+    "docx": "^8.5.0",
     "file-saver": "^2.0.5",
     "form-data": "^4.0.0",
     "react": "^16.8.0",
