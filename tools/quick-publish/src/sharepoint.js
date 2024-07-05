@@ -248,7 +248,7 @@ export async function PublishAndNotify() {
                     {
                         properties: {},
                         children: [
-                            new Paragraph(existingText),
+                            new Paragraph(result.value),
                             new Paragraph({
                                 text: "New Heading 1",
                                 heading: HeadingLevel.HEADING_1
