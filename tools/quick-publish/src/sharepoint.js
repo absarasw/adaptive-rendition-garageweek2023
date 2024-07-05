@@ -241,11 +241,12 @@ export async function PublishAndNotify() {
         const text = await response.arrayBuffer();
         try {
             const result = await mammoth.extractRawText({arrayBuffer : text });
+            console.log('-----result is ' + result + '------');
             return result.value;
         } catch (error) {
             console.error(error);
         }
-        console.log('-----' + text + '------');
+
     } else {
         console.log('request failed');
     }
