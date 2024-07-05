@@ -249,7 +249,7 @@ export async function PublishAndNotify() {
             const doc = new Document({arrayBuffer : text });
 
             // Modify the document by adding new content
-            doc.addSection({
+            /*doc.addSection({
                 children: [
                     new Paragraph({
                         text: "New Heading 1",
@@ -259,7 +259,7 @@ export async function PublishAndNotify() {
                         text: "This is a new paragraph text under the new heading."
                     })
                 ]
-            });
+            });*/
             /*const doc = new Document({
                 sections: [
                     {
