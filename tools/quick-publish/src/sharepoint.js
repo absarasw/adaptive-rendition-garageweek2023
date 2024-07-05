@@ -240,7 +240,7 @@ export async function PublishAndNotify() {
     if (response.ok) {
         const text = await response.arrayBuffer();
         try {
-            const result = await mammoth.extractRawText({ text });
+            const result = await mammoth.extractRawText({arrayBuffer : text });
             return result.value;
         } catch (error) {
             console.error(error);
