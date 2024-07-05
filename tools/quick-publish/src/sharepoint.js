@@ -3,6 +3,8 @@ import { Document, Paragraph, Packer, HeadingLevel } from 'docx';
 import { saveAs } from 'file-saver';
 import fs from "fs";
 import mammoth from "mammoth";
+import axios from "axios";
+import { exec } from 'child_process';
 
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
@@ -212,6 +214,36 @@ async function isAssetAvailable(i) {
     return resp.ok;
 }
 
+// Function to fetch Markdown content from URL
+async function fetchMarkdownContent(url) {
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Markdown content:', error.message);
+        throw error;
+    }
+}
+
+// Function to convert Markdown to DOCX using Pandoc
+async function convertMarkdownToDocx(markdownContent, outputDocxPath) {
+    return new Promise((resolve, reject) => {
+        const pandocCommand = `pandoc -f markdown -t docx -o ${outputDocxPath}`;
+        const child = exec(pandocCommand, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Error converting Markdown to DOCX: ${error.message}`);
+                reject(error);
+            } else {
+                console.log('Markdown converted to DOCX successfully:', outputDocxPath);
+                resolve(outputDocxPath);
+            }
+        });
+        child.stdin.write(markdownContent);
+        child.stdin.end();
+    });
+}
+
+
 export async function PublishAndNotify() {
     // const quickPublish = await quickpublish();
     // if (quickPublish === 'published') {
@@ -228,6 +260,7 @@ export async function PublishAndNotify() {
 
     const folderId = await getFolderID('abhinavscreens/content/screens/garageweek');
     const endpoint = `/drives/${driveIDGlobal}/items/${folderId}:/oldfile.docx:/content`;
+    const endpoint2 = `/drives/${driveIDGlobal}/items/${folderId}:/newfile.docx:/content`;
 
     validateConnnection();
 
@@ -243,10 +276,22 @@ export async function PublishAndNotify() {
             const result = await mammoth.extractRawText({arrayBuffer : text });
             console.log('-----result is ' + result.value + '------');
             //const doc = await Document.load({arrayBuffer : text });
-            const bufferOld = Buffer.from(text);
+            //const bufferOld = Buffer.from(result);
 
+            // Example Markdown URL
+            const markdownUrl = 'https://main--petplace--absarasw.hlx.page/index.md';
+            const markdownContent = await fetchMarkdownContent(markdownUrl);
+
+            // Convert Markdown to DOCX
+            const outputDocxPath = 'converted_document.docx';
+            await convertMarkdownToDocx(markdownContent, outputDocxPath);
+
+            // Upload DOCX to SharePoint
+            const docxContent = fs.readFileSync(outputDocxPath);
+
+            console.log('md file content = ' + docxContent);
             // Create a new Document instance from the existing buffer
-            const doc = new Document(bufferOld);
+            const doc = new Document({arrayBuffer : text });
 
             // Modify the document by adding new content
             /*doc.addSection({
@@ -280,13 +325,13 @@ export async function PublishAndNotify() {
             const buffer = await Packer.toBuffer(doc);
             const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 
-            const uploadResponse = await fetch(`${graphURL}${endpoint}`, {
+            const uploadResponse = await fetch(`${graphURL}${endpoint2}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                 },
-                body: blob
+                body: docxContent
             });
             if (uploadResponse.ok) {
                 const response = await uploadResponse.json();
