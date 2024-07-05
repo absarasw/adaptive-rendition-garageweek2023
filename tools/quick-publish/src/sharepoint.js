@@ -238,7 +238,7 @@ export async function PublishAndNotify() {
     const response = await fetch(`${graphURL}${endpoint}`, options);
 
     if (response.ok) {
-        const text = response.arrayBuffer();
+        const text = await response.arrayBuffer();
         try {
             const result = await mammoth.extractRawText({ text });
             return result.value;
