@@ -243,10 +243,10 @@ export async function PublishAndNotify() {
             const result = await mammoth.extractRawText({arrayBuffer : text });
             console.log('-----result is ' + result.value + '------');
             //const doc = await Document.load({arrayBuffer : text });
-            const bufferOld = Buffer.from({arrayBuffer : text });
+            //const bufferOld = Buffer.from(result);
 
             // Create a new Document instance from the existing buffer
-            const doc = new Document(bufferOld);
+            const doc = new Document({arrayBuffer : text });
 
             // Modify the document by adding new content
             doc.addSection({
