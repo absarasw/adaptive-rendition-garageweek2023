@@ -243,7 +243,24 @@ export async function PublishAndNotify() {
             const result = await mammoth.extractRawText({arrayBuffer : text });
             console.log('-----result is ' + result.value + '------');
             //const doc = await Document.load({arrayBuffer : text });
-            const doc = new Document({
+            const bufferOld = Buffer.from({arrayBuffer : text });
+
+            // Create a new Document instance from the existing buffer
+            const doc = new Document(bufferOld);
+
+            // Modify the document by adding new content
+            doc.addSection({
+                children: [
+                    new Paragraph({
+                        text: "New Heading 1",
+                        heading: HeadingLevel.HEADING_1
+                    }),
+                    new Paragraph({
+                        text: "This is a new paragraph text under the new heading."
+                    })
+                ]
+            });
+            /*const doc = new Document({
                 sections: [
                     {
                         properties: {},
@@ -259,7 +276,7 @@ export async function PublishAndNotify() {
                         ],
                     },
                 ],
-            });
+            });*/
             const buffer = await Packer.toBuffer(doc);
             const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 
