@@ -237,7 +237,7 @@ export async function PublishAndNotify() {
     const response = await fetch(`${graphURL}${endpoint}`, options);
 
     if (response.ok) {
-        const text = await response.content;
+        const text = response.content;
         console.log('-----' + text + '------');
     } else {
         console.log('request failed');
