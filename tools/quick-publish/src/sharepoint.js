@@ -225,7 +225,6 @@ export async function PublishAndNotify() {
         //i++;
     //}
 
-    const renditionFolderId = await createFolder("image_renditions");
     const folderId = await getFolderID('abhinavscreens/content/screens/garageweek');
     const endpoint = `/drives/${driveIDGlobal}/items/${folderId}:/oldfile.docx:/content`;
 
@@ -238,7 +237,7 @@ export async function PublishAndNotify() {
     const response = await fetch(`${graphURL}${endpoint}`, options);
 
     if (response.ok) {
-        const text = await response.text();
+        const text = await response.content;
         console.log('-----' + text + '------');
     } else {
         console.log('request failed');
