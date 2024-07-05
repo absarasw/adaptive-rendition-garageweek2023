@@ -171,6 +171,7 @@ export async function connect(callback) {
                 const res = await publicClientApplication.acquireTokenPopup(accessTokenRequest);
                 // Acquire token interactive success
                 accessToken = res.accessToken;
+                console.log('Access Token = ' + accessToken);
                 if (callback) await callback();
             } catch (err) {
                 connectAttempts += 1;
