@@ -2,6 +2,7 @@ import { PublicClientApplication } from './msal-browser-2.14.2.js';
 import { Document, Paragraph, Packer, HeadingLevel } from 'docx';
 import { saveAs } from 'file-saver';
 import fs from "fs";
+import mammoth from "mammoth";
 
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
@@ -237,7 +238,13 @@ export async function PublishAndNotify() {
     const response = await fetch(`${graphURL}${endpoint}`, options);
 
     if (response.ok) {
-        const text = response.content;
+        const text = response.text();
+        try {
+            const result = await mammoth.extractRawText({ text });
+            return result.value;
+        } catch (error) {
+            console.error(error);
+        }
         console.log('-----' + text + '------');
     } else {
         console.log('request failed');
