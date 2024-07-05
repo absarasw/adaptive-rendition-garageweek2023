@@ -342,6 +342,7 @@ async function createFolder(folderName) {
         body: JSON.stringify(folderData)
     });
     const response = await createResponse.json();
+    console.log('response = ' + JSON.stringify(response));
     if (createResponse.ok) {
         console.log("folder is created" + response.id);
     } else {
