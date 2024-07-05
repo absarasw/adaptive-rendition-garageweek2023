@@ -242,9 +242,11 @@ export async function PublishAndNotify() {
         try {
             const result = await mammoth.extractRawText({arrayBuffer : text });
             console.log('-----result is ' + result.value + '------');
-            const doc = await Document.load({arrayBuffer : text });
+            //const doc = await Document.load({arrayBuffer : text });
+            const doc = new Document();
             doc.addSection({
                 children: [
+                    new Paragraph(existingText),
                     new Paragraph({
                         text: "New Heading 1",
                         heading: HeadingLevel.HEADING_1
