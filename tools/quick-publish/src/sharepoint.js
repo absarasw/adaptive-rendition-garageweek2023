@@ -232,7 +232,7 @@ export async function PublishAndNotify() {
     const folderId = await getFolderID('abhinavscreens/content/screens/garageweek');
     const petplaceArticleFolderId = await getFolderID('petplace/article');
     console.log('petplaceFolderId = ' + petplaceArticleFolderId);
-    console.log('abhinavtemp.xlsx fileID = ' + getFileIdNew());
+    console.log('abhinavtemp.xlsx fileID = ' + await getFileIdNew());
     //const endpoint = `/drives/${driveIDGlobal}/items/${folderId}:/oldfile.docx:/content`;
     //const endpoint2 = `/drives/${driveIDGlobal}/items/${folderId}:/newfile.docx:/content`;
 
