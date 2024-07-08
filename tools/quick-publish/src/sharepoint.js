@@ -250,7 +250,7 @@ export async function PublishAndNotify() {
     );
 
     if (jsonArray.length > 0) {
-        const addEntriesResponse = await addEntriesToExcel(driveIDGlobal, excelFileID, 'abhinavtemp', 1, jsonArray);
+        const addEntriesResponse = await addEntriesToExcel(driveIDGlobal, excelFileID, 'Sheet1', 1, jsonArray);
     }
 
     //const endpoint = `/drives/${driveIDGlobal}/items/${folderId}:/oldfile.docx:/content`;
