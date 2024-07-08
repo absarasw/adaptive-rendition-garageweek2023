@@ -232,6 +232,7 @@ export async function PublishAndNotify() {
     const folderId = await getFolderID('abhinavscreens/content/screens/garageweek');
     const petplaceArticleFolderId = await getFolderID('petplace/article');
     console.log('petplaceFolderId = ' + petplaceArticleFolderId);
+    console.log('abhinavtemp.xlsx fileID = ' + getFileIdNew());
     //const endpoint = `/drives/${driveIDGlobal}/items/${folderId}:/oldfile.docx:/content`;
     //const endpoint2 = `/drives/${driveIDGlobal}/items/${folderId}:/newfile.docx:/content`;
 
@@ -323,6 +324,27 @@ export async function PublishAndNotify() {
     //}
 }
 
+
+async function getFileIdNew() {
+    const getByPathUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/root:/petplace`;
+
+    const endpoint = `${getByPathUrl}/abhinavtemp.xlsx`;
+
+    validateConnnection();
+
+    const options = getRequestOption();
+    options.headers.append('Content-Type', 'application/json');
+    options.method = 'GET';
+
+    const response = await fetch(`${endpoint}`, options);
+
+    if (response.ok) {
+        const file = await response.json();
+        return file.id;
+    }
+
+    throw new Error(`Could not retrieve file ID. Status: ${response.status}`);
+}
 
 async function uploadDocumentFile(folderId) {
 
