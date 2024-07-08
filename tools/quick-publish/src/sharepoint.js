@@ -230,8 +230,8 @@ export async function PublishAndNotify() {
     //}
 
     const folderId = await getFolderID('abhinavscreens/content/screens/garageweek');
-    const petplaceFolderId = await getFolderID('petplace');
-    console.log('petplaceFolderId = ' + petplaceFolderId);
+    const petplaceArticleFolderId = await getFolderID('petplace/article');
+    console.log('petplaceFolderId = ' + petplaceArticleFolderId);
     //const endpoint = `/drives/${driveIDGlobal}/items/${folderId}:/oldfile.docx:/content`;
     //const endpoint2 = `/drives/${driveIDGlobal}/items/${folderId}:/newfile.docx:/content`;
 
