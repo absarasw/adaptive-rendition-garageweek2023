@@ -232,7 +232,27 @@ export async function PublishAndNotify() {
     const folderId = await getFolderID('abhinavscreens/content/screens/garageweek');
     const petplaceArticleFolderId = await getFolderID('petplace/article');
     console.log('petplaceFolderId = ' + petplaceArticleFolderId);
-    console.log('abhinavtemp.xlsx fileID = ' + await getFileIdNew());
+    const excelFileID = await getFileIdNew());
+    console.log('abhinavtemp.xlsx fileID = ' + excelFileID);
+    const jsonArray = [];
+    jsonArray.push(
+        {
+            id: 'abc',
+            notificationData: 'fdfsdgdfsg',
+        },
+    );
+
+    jsonArray.push(
+        {
+            id: 'trt',
+            notificationData: 'sdgdgdfgdt',
+        },
+    );
+
+    if (jsonArray.length > 0) {
+        const addEntriesResponse = await addEntriesToExcel(driveIDGlobal, excelFileID, 'abhinavtemp.xlsx', 1, jsonArray);
+    }
+
     //const endpoint = `/drives/${driveIDGlobal}/items/${folderId}:/oldfile.docx:/content`;
     //const endpoint2 = `/drives/${driveIDGlobal}/items/${folderId}:/newfile.docx:/content`;
 
