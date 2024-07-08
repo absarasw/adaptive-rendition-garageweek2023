@@ -40,8 +40,6 @@
     "react-dom": "^16.8.0",
     "isomorphic-form-data": "2.0.0",
     "get-stream": "7.0.1",
-    "parse-multipart-data": "1.5.0",
-    "mammoth": "1.8.0",
-    "child_process": "1.0.2"
+    "parse-multipart-data": "1.5.0"
   }
 }
